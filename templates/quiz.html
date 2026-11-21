@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ quiz.title }} – BondQuiz{% endblock %}
+
+{% block body_class %}theme-{{ quiz.theme }}{% endblock %}
+
+{% block content %}
+<div class="container py-5" id="quizPlayerApp" data-public-id="{{ quiz.public_id }}">
+  <div class="row justify-content-center">
+    <div class="col-lg-7 col-md-9">
+
+      <!-- Loading State -->
+      <div id="loadingState" class="text-center py-5">
+        <div class="spinner-grow text-primary mb-3" style="width: 3rem; height: 3rem;" role="status"></div>
+        <h5 class="fw-bold text-muted">Loading your quiz challenge...</h5>
+      </div>
+
+      <!-- Closed Quiz State -->
+      <div id="closedQuizState" class="quiz-card text-center p-5 d-none">
+        <div class="display-3 mb-3">🔒</div>
+        <h3 class="fw-bold mb-2">This Quiz is Currently Closed</h3>
+        <p id="closedQuizMessage" class="text-muted mb-4">
+          The creator has paused or closed submissions for this quiz.
+        </p>
+        <a href="{{ url_for('quiz.home') }}" class="btn btn-bond-primary">
+          <i class="fa-solid fa-wand-magic-sparkles me-2"></i> Create Your Own Quiz
+        </a>
+      </div>
+
+      <!-- Welcome / Enter Nickname Screen -->
+      <div id="welcomeScreen" class="quiz-card text-center p-4 p-md-5 d-none">
+        <div class="mb-3">
+          <span class="badge badge-soft-primary fs-6 px-3 py-2">
+            <i class="fa-solid fa-gamepad me-1"></i> Friendship Challenge
+          </span>
+        </div>
+
+        <div class="mb-3" style="font-size: 3.5rem;">
+          {% if quiz.avatar == 'cat' %}🐱
+          {% elif quiz.avatar == 'crown' %}👑
+          {% elif quiz.avatar == 'heart' %}💖
+          {% elif quiz.avatar == 'fire' %}🔥
+          {% elif quiz.avatar == 'pizza' %}🍕
+          {% elif quiz.avatar == 'rocket' %}🚀
+          {% elif quiz.avatar == 'sunglasses' %}🕶️
+          {% elif quiz.avatar == 'gamepad' %}🎮
+          {% elif quiz.avatar == 'unicorn' %}🦄
+          {% else %}✨{% endif %}
+        </div>
+
+        <h2 id="welcomeQuizTitle" class="fw-extrabold mb-2 display-6">
+          {{ quiz.title }}
+        </h2>
+
+        <p class="text-muted mb-3">
+          Created by <strong class="text-dark" id="welcomeCreator">{{ quiz.creator_name }}</strong>
+        </p>
+
+        <p id="welcomeDesc" class="text-muted lead fs-6 mb-4 px-md-4">
+          {{ quiz.description or 'Think you really know them? Answer the questions to prove your bond!' }}
+        </p>
+
+        <div class="d-flex justify-content-center gap-3 text-muted small fw-bold mb-4">
+          <span><i class="fa-solid fa-circle-question text-primary me-1"></i> <span id="welcomeQuestionCount">{{ quiz.questions|length }} Questions</span></span>
+          <span>•</span>
+          <span><i class="fa-solid fa-stopwatch text-warning me-1"></i> ~2 Minutes</span>
+          <span>•</span>
+          <span><i class="fa-solid fa-trophy text-success me-1"></i> Live Ranks</span>
+        </div>
+
+        <div class="card p-4 bg-light rounded-4 border-0 mb-4 text-start">
+          <label class="form-label fw-bold mb-2">
+            Enter your name or nickname to start:
+          </label>
+          <div class="input-group input-group-lg">
+            <span class="input-group-text bg-white border-end-0 rounded-start-3 text-muted">
+              <i class="fa-solid fa-user"></i>
+            </span>
+            <input type="text" id="participantNickname" class="form-control border-start-0 rounded-end-3 fw-bold" 
+              placeholder="e.g. Jordan, Sam, Chloe..." maxlength="60" autofocus required>
+          </div>
+          <div class="form-text mt-2">Your score will appear under this name on the leaderboard!</div>
+        </div>
+
+        <button id="startQuizBtn" class="btn btn-bond-primary btn-lg w-100 py-3" onclick="startQuizAttempt()">
+          Start Quiz Now <i class="fa-solid fa-arrow-right ms-2"></i>
+        </button>
+      </div>
+
+      <!-- Active Question Stepper Screen -->
+      <div id="activeQuestionView" class="quiz-card p-4 p-md-5 d-none position-relative">
+        
+        <!-- Progress Bar & Counter -->
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span id="questionCounterBadge" class="badge badge-soft-primary">
+            Question 1 of 5
+          </span>
+          <span class="small text-muted fw-bold">BondQuiz Challenge</span>
+        </div>
+
+        <div class="progress-stepper">
+          <div id="questionProgressBar" class="progress-stepper-bar" style="width: 20%;"></div>
+        </div>
+
+        <!-- Question Text -->
+        <h3 id="activeQuestionText" class="fw-extrabold mb-4 pt-2" style="line-height: 1.35;">
+          Question goes here?
+        </h3>
+
+        <!-- Options Container -->
+        <div id="optionsContainer" class="d-flex flex-column mb-4"></div>
+
+        <!-- Navigation Buttons -->
+        <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+          <button id="quizPrevBtn" class="btn btn-bond-outline" onclick="goToPrevQuestion()">
+            <i class="fa-solid fa-arrow-left me-1"></i> Previous
+          </button>
+          
+          <button id="quizNextBtn" class="btn btn-bond-primary px-4" onclick="goToNextQuestion()">
+            Next <i class="fa-solid fa-arrow-right ms-1"></i>
+          </button>
+
+          <button id="quizSubmitBtn" class="btn btn-bond-primary px-4 d-none" onclick="submitQuiz()">
+            Submit Quiz <i class="fa-solid fa-flag-checkered ms-2"></i>
+          </button>
+        </div>
+
+        <div class="text-center text-muted small mt-3">
+          Tip: You can also press <strong>1, 2, 3, 4</strong> on your keyboard to pick an option!
+        </div>
+      </div>
+
+      <!-- Results Screen (Shown on submission) -->
+      <div id="quizResultView" class="quiz-card text-center p-4 p-md-5 d-none">
+        
+        <div class="score-circle">
+          <div id="resultScoreDisplay" class="score-number">0/0</div>
+          <div id="resultPercentage" class="score-label">0%</div>
+        </div>
+
+        <span id="resultTierBadge" class="badge badge-soft-primary fs-6 px-4 py-2 mb-2">
+          Tier Name
+        </span>
+
+        <h2 id="resultFeedbackTitle" class="fw-extrabold display-6 mb-2">
+          Awesome Result!
+        </h2>
+
+        <p id="resultFeedbackMsg" class="text-muted lead fs-6 mb-4 px-md-4">
+          Detailed friendly feedback goes here.
+        </p>
+
+        <!-- Action Buttons -->
+        <div class="d-flex flex-wrap justify-content-center gap-3 mb-4">
+          <button id="resultShareWhatsAppBtn" class="btn btn-success rounded-pill px-4 py-2 fw-bold shadow-sm">
+            <i class="fa-brands fa-whatsapp me-2 fs-5"></i> Share Score on WhatsApp
+          </button>
+          <button id="resultCopyScoreBtn" class="btn btn-bond-secondary rounded-pill px-4 py-2 fw-bold">
+            <i class="fa-regular fa-copy me-2"></i> Copy Score Link
+          </button>
+          <a id="resultLeaderboardBtn" href="#" class="btn btn-bond-outline rounded-pill px-4 py-2 fw-bold">
+            <i class="fa-solid fa-trophy me-2 text-warning"></i> View Leaderboard
+          </a>
+        </div>
+
+        <div class="p-3 bg-light rounded-4 mb-4">
+          <h5 class="fw-bold mb-1">Think you can make a better quiz?</h5>
+          <p class="text-muted small mb-3">Create your own quiz in 60 seconds and challenge {{ quiz.creator_name }} back!</p>
+          <a href="{{ url_for('quiz.create_quiz_page') }}" class="btn btn-bond-primary btn-sm rounded-pill px-4">
+            <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Create My Own Quiz
+          </a>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- Answers Review Section -->
+        <div class="text-start">
+          <h4 class="fw-bold mb-3">
+            <i class="fa-solid fa-list-check me-2 text-primary"></i> Answers Breakdown
+          </h4>
+          <p class="text-muted small mb-3">See what you got right and what you missed:</p>
+          <div id="resultBreakdownList"></div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/quiz.js') }}?v=3.0"></script>
+{% endblock %}

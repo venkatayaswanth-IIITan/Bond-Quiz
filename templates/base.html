@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}BondQuiz – How Well Do You Know Me?{% endblock %}</title>
+  
+  <!-- Favicon / Emoji Icon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💖</text></svg>">
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">
+
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-bond">
+    <div class="container">
+      <a class="brand-logo" href="{{ url_for('quiz.home') }}">
+        <div class="brand-icon">
+          <i class="fa-solid fa-heart-pulse"></i>
+        </div>
+        <span>Bond<span class="text-gradient">Quiz</span></span>
+      </a>
+
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+        <i class="fa-solid fa-bars-staggered fs-4"></i>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navContent">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-2 mt-3 mt-lg-0">
+          <li class="nav-item">
+            <a class="nav-link fw-semibold px-3" href="{{ url_for('quiz.home') }}#how-it-works">
+              <i class="fa-regular fa-lightbulb me-1"></i> How It Works
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold px-3" href="{{ url_for('quiz.home') }}#quiz-templates">
+              <i class="fa-solid fa-shapes me-1"></i> Templates
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold px-3" href="{{ url_for('quiz.home') }}#features">
+              <i class="fa-solid fa-star me-1"></i> Features
+            </a>
+          </li>
+          <li class="nav-item ms-lg-2" id="navMyQuizzesItem" style="display: none;">
+            <button class="btn btn-bond-secondary position-relative px-3" data-bs-toggle="offcanvas" data-bs-target="#myQuizzesOffcanvas">
+              <i class="fa-solid fa-trophy me-1 text-warning"></i> My Quizzes & Leaderboards
+              <span id="myQuizzesBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.7rem;">0</span>
+            </button>
+          </li>
+          <li class="nav-item ms-lg-2">
+            <button id="soundToggleBtn" class="btn btn-bond-outline rounded-circle p-2" style="width: 42px; height: 42px;" title="Toggle Sound">
+              <i class="fa-solid fa-volume-high"></i>
+            </button>
+          </li>
+          <li class="nav-item ms-lg-2">
+            <a class="btn btn-bond-primary" href="{{ url_for('quiz.create_quiz_page') }}">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> Create a Quiz
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Offcanvas Drawer: My Quizzes & Leaderboards -->
+  <div class="offcanvas offcanvas-end rounded-start-4" tabindex="-1" id="myQuizzesOffcanvas" aria-labelledby="myQuizzesLabel">
+    <div class="offcanvas-header border-bottom">
+      <h5 class="offcanvas-title fw-bold" id="myQuizzesLabel">
+        <i class="fa-solid fa-trophy text-warning me-2"></i> My Quizzes & Leaderboards
+      </h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body p-3" id="myQuizzesOffcanvasBody"></div>
+  </div>
+
+  <!-- Main View Container -->
+  <main>
+    {% if not_found %}
+      <div class="container text-center py-5 my-5">
+        <div class="display-1 text-gradient fw-extrabold mb-3">404</div>
+        <h2 class="fw-bold mb-3">Page Not Found</h2>
+        <p class="text-muted mb-4">The quiz or page you're searching for does not exist or has been removed.</p>
+        <a href="{{ url_for('quiz.home') }}" class="btn btn-bond-primary">
+          <i class="fa-solid fa-house me-2"></i> Return Home
+        </a>
+      </div>
+    {% else %}
+      {% block content %}{% endblock %}
+    {% endif %}
+  </main>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Footer -->
+  <footer class="footer-bond">
+    <div class="container">
+      <div class="row g-4 align-items-center">
+        <div class="col-md-5">
+          <div class="brand-logo mb-2">
+            <div class="brand-icon">
+              <i class="fa-solid fa-heart-pulse"></i>
+            </div>
+            <span>Bond<span class="text-gradient">Quiz</span></span>
+          </div>
+          <p class="text-muted small mb-0">
+            The modern social friendship quiz where real bonds are tested! Create custom quizzes for your besties, crush, partner, or family. Zero sign-up required.
+          </p>
+        </div>
+        <div class="col-md-4">
+          <div class="d-flex flex-wrap gap-3">
+            <a href="{{ url_for('quiz.create_quiz_page', category='best_friend') }}" class="footer-link">Best Friend Quiz</a>
+            <a href="{{ url_for('quiz.create_quiz_page', category='couple') }}" class="footer-link">Couple Quiz</a>
+            <a href="{{ url_for('quiz.create_quiz_page', category='crush') }}" class="footer-link">Crush Quiz</a>
+            <a href="{{ url_for('quiz.create_quiz_page', category='family') }}" class="footer-link">Family Quiz</a>
+          </div>
+        </div>
+        <div class="col-md-3 text-md-end text-muted small">
+          <div>Made with 💖 for genuine friendships</div>
+          <div class="mt-1 opacity-75">100% Free • No Login Needed</div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <!-- Bootstrap 5 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Custom Scripts -->
+  <script src="{{ url_for('static', filename='js/audio.js') }}?v=3.0"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}?v=3.0"></script>
+
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

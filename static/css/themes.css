@@ -1,0 +1,139 @@
+/* ==========================================================
+   BondQuiz Themes Palette
+   ========================================================== */
+
+/* Theme: Sunset Glow */
+body.theme-sunset_glow,
+[data-theme="sunset_glow"] {
+  --primary: #F97316;
+  --primary-rgb: 249, 115, 22;
+  --primary-hover: #EA580C;
+  --primary-light: #FFEDD5;
+  
+  --secondary: #EC4899;
+  --secondary-rgb: 236, 72, 153;
+  --secondary-hover: #DB2777;
+  --secondary-light: #FCE7F3;
+  
+  --accent: #E11D48;
+  --gradient-main: linear-gradient(135deg, #F97316 0%, #EC4899 50%, #E11D48 100%);
+  --gradient-subtle: linear-gradient(135deg, #FFF7ED 0%, #FDF2F8 100%);
+  --bg-page: #FFFBF7;
+  --border-focus: #FDBA74;
+  --shadow-glow: 0 0 25px rgba(249, 115, 22, 0.35);
+}
+
+/* Theme: Cyber Neon */
+body.theme-cyber_neon,
+[data-theme="cyber_neon"] {
+  --primary: #06B6D4;
+  --primary-rgb: 6, 182, 212;
+  --primary-hover: #0891B2;
+  --primary-light: #CFFAFE;
+  
+  --secondary: #8B5CF6;
+  --secondary-rgb: 139, 92, 246;
+  --secondary-hover: #7C3AED;
+  --secondary-light: #EDE9FE;
+  
+  --accent: #F43F5E;
+  --gradient-main: linear-gradient(135deg, #06B6D4 0%, #8B5CF6 50%, #EC4899 100%);
+  --gradient-subtle: linear-gradient(135deg, #ECFEFF 0%, #FAF5FF 100%);
+  --bg-page: #F6FCFD;
+  --border-focus: #67E8F9;
+  --shadow-glow: 0 0 25px rgba(6, 182, 212, 0.4);
+}
+
+/* Theme: Bubblegum Pop */
+body.theme-bubblegum,
+[data-theme="bubblegum"] {
+  --primary: #F43F5E;
+  --primary-rgb: 244, 63, 94;
+  --primary-hover: #E11D48;
+  --primary-light: #FFE4E6;
+  
+  --secondary: #06B6D4;
+  --secondary-rgb: 6, 182, 212;
+  --secondary-hover: #0891B2;
+  --secondary-light: #CFFAFE;
+  
+  --accent: #FB7185;
+  --gradient-main: linear-gradient(135deg, #F43F5E 0%, #EC4899 50%, #06B6D4 100%);
+  --gradient-subtle: linear-gradient(135deg, #FFF1F2 0%, #ECFEFF 100%);
+  --bg-page: #FFF9FA;
+  --border-focus: #FDA4AF;
+  --shadow-glow: 0 0 25px rgba(244, 63, 94, 0.35);
+}
+
+/* Theme: Midnight Velvet (Dark Mode / Sleek Neon) */
+body.theme-midnight_velvet,
+[data-theme="midnight_velvet"] {
+  --primary: #A855F7;
+  --primary-rgb: 168, 85, 247;
+  --primary-hover: #9333EA;
+  --primary-light: rgba(168, 85, 247, 0.15);
+  
+  --secondary: #EC4899;
+  --secondary-rgb: 236, 72, 153;
+  --secondary-hover: #DB2777;
+  --secondary-light: rgba(236, 72, 153, 0.15);
+  
+  --bg-page: #0F0D17;
+  --bg-card: #1B1827;
+  --text-main: #F3F4F6;
+  --text-muted: #9CA3AF;
+  --border-color: #2D2742;
+  --border-focus: #A855F7;
+  --gradient-subtle: linear-gradient(135deg, #1A1629 0%, #201933 100%);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 30px rgba(168, 85, 247, 0.45);
+}
+
+body.theme-midnight_velvet .navbar-bond {
+  background: rgba(27, 24, 39, 0.92);
+  border-bottom: 1px solid #2D2742;
+}
+
+body.theme-midnight_velvet .option-card {
+  background: #1B1827;
+  color: #F3F4F6;
+  border-color: #2D2742;
+}
+
+body.theme-midnight_velvet .stat-box {
+  background: #1B1827;
+  border-color: #2D2742;
+}
+
+body.theme-midnight_velvet .category-card {
+  background: #1B1827;
+  border-color: #2D2742;
+}
+
+body.theme-midnight_velvet .footer-bond {
+  background: #14121E;
+  border-top: 1px solid #2D2742;
+}
+
+/* Theme: Emerald Mint */
+body.theme-emerald_mint,
+[data-theme="emerald_mint"] {
+  --primary: #10B981;
+  --primary-rgb: 16, 185, 129;
+  --primary-hover: #059669;
+  --primary-light: #D1FAE5;
+  
+  --secondary: #06B6D4;
+  --secondary-rgb: 6, 182, 212;
+  --secondary-hover: #0891B2;
+  --secondary-light: #CFFAFE;
+  
+  --accent: #14B8A6;
+  --gradient-main: linear-gradient(135deg, #10B981 0%, #06B6D4 50%, #3B82F6 100%);
+  --gradient-subtle: linear-gradient(135deg, #ECFDF5 0%, #ECFEFF 100%);
+  --bg-page: #F6FDF9;
+  --border-focus: #6EE7B7;
+  --shadow-glow: 0 0 25px rgba(16, 185, 129, 0.35);
+}

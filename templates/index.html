@@ -1,0 +1,400 @@
+{% extends 'base.html' %}
+
+{% block title %}BondQuiz – How Well Do Your Friends Really Know You?{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-7 text-center text-lg-start">
+        <div class="d-inline-flex align-items-center gap-2 badge-soft-primary mb-3">
+          <i class="fa-solid fa-sparkles"></i> 
+          <span>The #1 Social Friendship Challenge</span>
+        </div>
+        
+        <h1 class="hero-title">
+          How well do your friends <span class="text-gradient">really know you?</span>
+        </h1>
+        
+        <p class="hero-subtitle">
+          Create a fun quiz, share it with your friends and discover who knows you best!
+        </p>
+
+        <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start align-items-center mb-4">
+          <a href="{{ url_for('quiz.create_quiz_page') }}" class="btn btn-bond-primary btn-lg">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Create a Quiz
+          </a>
+          <a href="#quiz-templates" class="btn btn-bond-secondary btn-lg">
+            <i class="fa-solid fa-shapes"></i> Explore Quiz Ideas
+          </a>
+        </div>
+
+        <div class="d-flex flex-wrap align-items-center gap-4 justify-content-center justify-content-lg-start text-muted small fw-semibold">
+          <div class="d-flex align-items-center gap-2">
+            <i class="fa-solid fa-shield-halved text-success fs-5"></i> No Sign-up Required
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <i class="fa-solid fa-bolt text-warning fs-5"></i> Takes 60 Seconds
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <i class="fa-solid fa-trophy text-primary fs-5"></i> Live Leaderboard
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Mock Card Preview -->
+      <div class="col-lg-5">
+        <div class="quiz-card p-4 position-relative" style="transform: rotate(1deg); border: 2px solid var(--border-color);">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <span class="badge badge-soft-primary">
+              <i class="fa-solid fa-crown me-1 text-warning"></i> Best Friend Challenge
+            </span>
+            <span class="small text-muted fw-bold">Live Demo</span>
+          </div>
+
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <div style="font-size: 2.5rem; background: var(--primary-light); width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center;">
+              🐱
+            </div>
+            <div>
+              <h5 class="fw-bold mb-0">How well do you know Alex?</h5>
+              <small class="text-muted">7 Questions • 2 mins</small>
+            </div>
+          </div>
+
+          <div class="bg-light p-3 rounded-4 mb-3">
+            <div class="small fw-bold text-muted mb-2">Sample Question #1</div>
+            <div class="fw-bold mb-3">What is my absolute favourite comfort food?</div>
+            <div class="d-flex flex-column gap-2">
+              <div class="option-card py-2 px-3 mb-0" style="font-size: 0.95rem; border-color: var(--primary); background: var(--primary-light);">
+                <span class="option-marker" style="width: 26px; height: 26px; font-size: 0.8rem; background: var(--primary); color: white;">A</span>
+                <span>Crispy Pizza 🍕</span>
+                <i class="fa-solid fa-check text-primary ms-auto"></i>
+              </div>
+              <div class="option-card py-2 px-3 mb-0" style="font-size: 0.95rem;">
+                <span class="option-marker" style="width: 26px; height: 26px; font-size: 0.8rem;">B</span>
+                <span>Spicy Ramen 🍜</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex align-items-center justify-content-between text-muted small">
+            <span><i class="fa-solid fa-users text-primary me-1"></i> 14 friends played</span>
+            <span class="fw-bold text-gradient">Leaderboard Active</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- My Active Quizzes & Leaderboards Section (Shown automatically if user created quizzes) -->
+<section id="myQuizzesHomeSection" class="py-4 d-none">
+  <div class="container">
+    <div class="quiz-card p-4 border-2 border-primary border-opacity-25" style="background: var(--gradient-subtle);">
+      <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+        <div>
+          <span class="badge badge-soft-primary mb-1">
+            <i class="fa-solid fa-crown text-warning me-1"></i> Creator Hub
+          </span>
+          <h3 class="fw-extrabold mb-1">Your Quizzes & Live Leaderboards</h3>
+          <p class="text-muted small mb-0">Jump directly into your live leaderboards or check what your friends answered!</p>
+        </div>
+        <a href="{{ url_for('quiz.create_quiz_page') }}" class="btn btn-bond-primary btn-sm rounded-pill mt-2 mt-md-0">
+          <i class="fa-solid fa-plus me-1"></i> Create Another Quiz
+        </a>
+      </div>
+      <div id="myQuizzesHomeContainer" class="row g-3"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Feature Categories Section -->
+<section id="categories" class="py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="badge badge-soft-secondary mb-2">Quiz Categories</span>
+      <h2 class="fw-extrabold display-6">Pick Your Challenge Type</h2>
+      <p class="text-muted">Choose a category and get pre-loaded with fun, spicy, and bonding questions!</p>
+    </div>
+
+    <div class="row g-4">
+      <!-- Best Friend -->
+      <div class="col-md-4 col-sm-6">
+        <a href="{{ url_for('quiz.create_quiz_page', category='best_friend') }}" class="category-card">
+          <div class="category-icon-box">🏆</div>
+          <h4 class="fw-bold mb-2">Best Friend Challenge</h4>
+          <p class="text-muted small mb-3">Test which of your besties actually knows your deepest secrets, pet peeves, and cravings.</p>
+          <span class="badge badge-soft-primary">Start Bestie Quiz <i class="fa-solid fa-arrow-right ms-1"></i></span>
+        </a>
+      </div>
+
+      <!-- Couple Quiz -->
+      <div class="col-md-4 col-sm-6">
+        <a href="{{ url_for('quiz.create_quiz_page', category='couple') }}" class="category-card">
+          <div class="category-icon-box">💕</div>
+          <h4 class="fw-bold mb-2">Couple Quiz</h4>
+          <p class="text-muted small mb-3">Does your boyfriend or girlfriend remember your favorite dates, love languages, and habits?</p>
+          <span class="badge badge-soft-secondary">Start Couple Quiz <i class="fa-solid fa-arrow-right ms-1"></i></span>
+        </a>
+      </div>
+
+      <!-- Friendship Quiz -->
+      <div class="col-md-4 col-sm-6">
+        <a href="{{ url_for('quiz.create_quiz_page', category='friends') }}" class="category-card">
+          <div class="category-icon-box">🎉</div>
+          <h4 class="fw-bold mb-2">Friendship Quiz</h4>
+          <p class="text-muted small mb-3">The ultimate vibe check for your whole friend group chat. Find out who the real ones are!</p>
+          <span class="badge badge-soft-primary">Start Friends Quiz <i class="fa-solid fa-arrow-right ms-1"></i></span>
+        </a>
+      </div>
+
+      <!-- Crush Quiz -->
+      <div class="col-md-4 col-sm-6">
+        <a href="{{ url_for('quiz.create_quiz_page', category='crush') }}" class="category-card">
+          <div class="category-icon-box">💘</div>
+          <h4 class="fw-bold mb-2">Crush Quiz</h4>
+          <p class="text-muted small mb-3">Send this to your crush to playfully break the ice and see if sparks are really flying!</p>
+          <span class="badge badge-soft-secondary">Start Crush Quiz <i class="fa-solid fa-arrow-right ms-1"></i></span>
+        </a>
+      </div>
+
+      <!-- Family Quiz -->
+      <div class="col-md-4 col-sm-6">
+        <a href="{{ url_for('quiz.create_quiz_page', category='family') }}" class="category-card">
+          <div class="category-icon-box">🏡</div>
+          <h4 class="fw-bold mb-2">Family Quiz</h4>
+          <p class="text-muted small mb-3">Put your siblings and parents to the test with funny childhood memories and family trivia.</p>
+          <span class="badge badge-soft-primary">Start Family Quiz <i class="fa-solid fa-arrow-right ms-1"></i></span>
+        </a>
+      </div>
+
+      <!-- Fun Challenges -->
+      <div class="col-md-4 col-sm-6">
+        <a href="{{ url_for('quiz.create_quiz_page', category='custom') }}" class="category-card">
+          <div class="category-icon-box">⚡</div>
+          <h4 class="fw-bold mb-2">Custom Challenge</h4>
+          <p class="text-muted small mb-3">Build your own 100% custom quiz with completely unique questions, crazy options, and themes!</p>
+          <span class="badge badge-soft-primary">Create Custom Quiz <i class="fa-solid fa-arrow-right ms-1"></i></span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works Section -->
+<section id="how-it-works" class="py-5 bg-white border-top border-bottom">
+  <div class="container py-4">
+    <div class="text-center mb-5">
+      <span class="badge badge-soft-primary mb-2">Simple & Fun</span>
+      <h2 class="fw-extrabold display-6">How BondQuiz Works in 3 Steps</h2>
+      <p class="text-muted">Zero registration. No complicated setups. Share anywhere.</p>
+    </div>
+
+    <div class="row g-4 text-center">
+      <div class="col-md-4">
+        <div class="p-4">
+          <div style="width: 70px; height: 70px; border-radius: 50%; background: var(--primary-light); color: var(--primary); font-size: 1.8rem; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+            1
+          </div>
+          <h4 class="fw-bold mb-2">Pick Questions & Answers</h4>
+          <p class="text-muted">Select from our pre-made question bank or write your own custom questions. Pick your correct secret answer.</p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="p-4">
+          <div style="width: 70px; height: 70px; border-radius: 50%; background: var(--secondary-light); color: var(--secondary); font-size: 1.8rem; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+            2
+          </div>
+          <h4 class="fw-bold mb-2">Share Your Secret Link</h4>
+          <p class="text-muted">Copy your unique quiz link or share directly to WhatsApp, Instagram Stories, Snapchat, or iMessage.</p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="p-4">
+          <div style="width: 70px; height: 70px; border-radius: 50%; background: #FEF3C7; color: #D97706; font-size: 1.8rem; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+            3
+          </div>
+          <h4 class="fw-bold mb-2">Check the Leaderboard</h4>
+          <p class="text-muted">Watch friends submit their answers in real-time. See who ranks 🥇 Gold and read what hilarious answers they chose!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Popular Quiz Templates Preview Section -->
+<section id="quiz-templates" class="py-5">
+  <div class="container py-4">
+    <div class="d-flex flex-wrap align-items-end justify-content-between mb-4">
+      <div>
+        <span class="badge badge-soft-secondary mb-2">Ready-Made Templates</span>
+        <h2 class="fw-extrabold display-6">Popular Question Ideas</h2>
+        <p class="text-muted mb-0">Get inspired by what other besties are asking right now.</p>
+      </div>
+      <a href="{{ url_for('quiz.create_quiz_page') }}" class="btn btn-bond-primary mt-3 mt-md-0">
+        <i class="fa-solid fa-play me-2"></i> Use These in Your Quiz
+      </a>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="quiz-card h-100">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <span class="badge bg-danger rounded-pill">Spicy & Fun</span>
+          </div>
+          <h5 class="fw-bold mb-3">"What makes me instantly angry?"</h5>
+          <ul class="list-unstyled text-muted small d-flex flex-column gap-2 mb-4">
+            <li><i class="fa-regular fa-circle-dot text-primary me-2"></i> Loud chewers or bad manners</li>
+            <li><i class="fa-regular fa-circle-dot text-primary me-2"></i> People being 30 mins late</li>
+            <li><i class="fa-regular fa-circle-dot text-primary me-2"></i> Being left on read / delivered</li>
+            <li><i class="fa-regular fa-circle-dot text-primary me-2"></i> Slow walkers in crowded halls</li>
+          </ul>
+          <a href="{{ url_for('quiz.create_quiz_page', category='best_friend') }}" class="btn btn-sm btn-bond-outline w-100">
+            Create This Quiz
+          </a>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="quiz-card h-100">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <span class="badge bg-primary rounded-pill">Dream & Vibe</span>
+          </div>
+          <h5 class="fw-bold mb-3">"What's my dream bucket list trip?"</h5>
+          <ul class="list-unstyled text-muted small d-flex flex-column gap-2 mb-4">
+            <li><i class="fa-regular fa-circle-dot text-primary me-2"></i> Cherry blossoms in Tokyo, Japan 🌸</li>
+            <li><i class="fa-regular fa-circle-dot text-primary me-2"></i> Sunset beach villa in Bali 🏝️</li>
+            <li><i class="fa-regular fa-circle-dot text-primary me-2"></i> Romantic lights of Paris 🗼</li>
+            <li><i class="fa-regular fa-circle-dot text-primary me-2"></i> Skylines of New York City 🗽</li>
+          </ul>
+          <a href="{{ url_for('quiz.create_quiz_page', category='best_friend') }}" class="btn btn-sm btn-bond-outline w-100">
+            Create This Quiz
+          </a>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="quiz-card h-100">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <span class="badge bg-warning text-dark rounded-pill">Late Night Talks</span>
+          </div>
+          <h5 class="fw-bold mb-3">"If I had $1M, what's my first purchase?"</h5>
+          <ul class="list-unstyled text-muted small d-flex flex-column gap-2 mb-4">
+            <li><i class="fa-regular fa-circle-dot text-primary me-2"></i> Nonstop travel around the globe ✈️</li>
+            <li><i class="fa-regular fa-circle-dot text-primary me-2"></i> A dream aesthetic smart house 🏡</li>
+            <li><i class="fa-regular fa-circle-dot text-primary me-2"></i> Supercar or insane shopping spree 🏎️</li>
+            <li><i class="fa-regular fa-circle-dot text-primary me-2"></i> Invest everything & retire immediately 💰</li>
+          </ul>
+          <a href="{{ url_for('quiz.create_quiz_page', category='custom') }}" class="btn btn-sm btn-bond-outline w-100">
+            Create This Quiz
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="py-5 bg-white border-top">
+  <div class="container py-4">
+    <div class="text-center mb-5">
+      <span class="badge badge-soft-primary mb-2">Why Everyone Loves BondQuiz</span>
+      <h2 class="fw-extrabold display-6">Built for Fun, Protected for Fairness</h2>
+      <p class="text-muted">The best friend challenge that's playful, private, and impossible to cheat.</p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="stat-box">
+          <div class="stat-icon bg-light text-primary">
+            <i class="fa-solid fa-lock-open"></i>
+          </div>
+          <div>
+            <h5 class="fw-bold mb-1">Zero Signups</h5>
+            <p class="text-muted small mb-0">Neither you nor your friends need an account or email to play. Just click and go!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="stat-box">
+          <div class="stat-icon bg-light text-success">
+            <i class="fa-solid fa-shield-virus"></i>
+          </div>
+          <div>
+            <h5 class="fw-bold mb-1">Anti-Cheat Engine</h5>
+            <p class="text-muted small mb-0">Answers are scored strictly on the server. Inspect Element won't reveal the answers!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="stat-box">
+          <div class="stat-icon bg-light text-warning">
+            <i class="fa-solid fa-trophy"></i>
+          </div>
+          <div>
+            <h5 class="fw-bold mb-1">Real-time Leaderboard</h5>
+            <p class="text-muted small mb-0">Ranks automatically update with Gold, Silver, and Bronze trophies for the top 3 besties.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="stat-box">
+          <div class="stat-icon bg-light text-danger">
+            <i class="fa-solid fa-palette"></i>
+          </div>
+          <div>
+            <h5 class="fw-bold mb-1">6 Aesthetic Themes</h5>
+            <p class="text-muted small mb-0">Choose from Purple Bliss, Sunset Glow, Cyber Neon, Bubblegum, Midnight Velvet, and Emerald.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="stat-box">
+          <div class="stat-icon bg-light text-info">
+            <i class="fa-brands fa-whatsapp"></i>
+          </div>
+          <div>
+            <h5 class="fw-bold mb-1">1-Click WhatsApp Share</h5>
+            <p class="text-muted small mb-0">Share directly to group chats with pre-formatted challenge copy and instant QR codes.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="stat-box">
+          <div class="stat-icon bg-light text-primary">
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
+          <div>
+            <h5 class="fw-bold mb-1">Creator Dashboard</h5>
+            <p class="text-muted small mb-0">See who took your quiz, inspect what exact answers each friend picked, and manage questions anytime.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Call to action Banner -->
+<section class="py-5">
+  <div class="container">
+    <div class="quiz-card text-center py-5 px-4" style="background: var(--gradient-main); color: white;">
+      <h2 class="display-6 fw-extrabold mb-3">Ready to find out who your real besties are?</h2>
+      <p class="lead opacity-90 mb-4 mx-auto" style="max-width: 600px;">
+        Create your personalized friendship quiz in less than a minute. Share your link and watch the competition begin!
+      </p>
+      <a href="{{ url_for('quiz.create_quiz_page') }}" class="btn btn-light btn-lg rounded-pill px-4 py-3 fw-bold shadow">
+        <i class="fa-solid fa-wand-magic-sparkles text-primary me-2"></i> Create Your Quiz Now – It's Free!
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}

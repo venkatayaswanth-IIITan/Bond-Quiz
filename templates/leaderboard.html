@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+
+{% block title %}Leaderboard – {{ quiz.title }} – BondQuiz{% endblock %}
+
+{% block body_class %}theme-{{ quiz.theme }}{% endblock %}
+
+{% block content %}
+<div class="container py-5" id="leaderboardPageApp" data-public-id="{{ quiz.public_id }}">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      
+      <!-- Creator Recognition Banner (Auto-revealed if viewer is the creator) -->
+      <div id="creatorLeaderboardBanner" class="alert alert-info rounded-4 border-0 shadow-sm d-flex flex-wrap align-items-center justify-content-between p-3 mb-4 d-none">
+        <div class="d-flex align-items-center gap-2 mb-2 mb-md-0">
+          <span style="font-size: 1.5rem;">👑</span>
+          <div>
+            <strong>You created this quiz!</strong>
+            <div class="small text-muted">This live leaderboard is always available for you and your friends.</div>
+          </div>
+        </div>
+        <a id="creatorDashboardBannerLink" href="#" class="btn btn-sm btn-dark rounded-pill fw-bold px-3">
+          <i class="fa-solid fa-chart-line me-1"></i> Open Creator Dashboard
+        </a>
+      </div>
+
+      <!-- Leaderboard Header Card -->
+      <div class="quiz-card text-center mb-4 p-4 p-md-5">
+        <span class="badge badge-soft-primary fs-6 px-3 py-2 mb-3">
+          <i class="fa-solid fa-trophy text-warning me-1"></i> Live Hall of Fame
+        </span>
+
+        <h1 class="fw-extrabold display-6 mb-2">{{ quiz.title }}</h1>
+        <p class="text-muted lead fs-6 mb-4">
+          Created by <strong>{{ quiz.creator_name }}</strong> • {{ quiz.questions|length }} Questions
+        </p>
+
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+          <a href="{{ url_for('quiz.play_quiz_page', public_id=quiz.public_id) }}" class="btn btn-bond-primary">
+            <i class="fa-solid fa-play me-2"></i> Take This Quiz
+          </a>
+          <button class="btn btn-bond-secondary" onclick="shareOnWhatsApp(window.location.origin + '{{ url_for('quiz.play_quiz_page', public_id=quiz.public_id) }}')">
+            <i class="fa-brands fa-whatsapp me-2"></i> Challenge on WhatsApp
+          </button>
+        </div>
+      </div>
+
+      <!-- Podium Top 3 (if at least 1 participant) -->
+      {% if leaderboard and leaderboard|length > 0 %}
+        <div class="podium-container">
+          <!-- 2nd Place -->
+          {% if leaderboard|length >= 2 %}
+            <div class="podium-col">
+              <div class="podium-card podium-2">
+                <span class="podium-badge">🥈</span>
+                <div class="podium-name">{{ leaderboard[1].participant_name }}</div>
+                <div class="podium-score">{{ leaderboard[1].score }}/{{ leaderboard[1].total_questions }}</div>
+                <div class="small text-muted fw-bold">{{ leaderboard[1].percentage }}%</div>
+              </div>
+            </div>
+          {% endif %}
+
+          <!-- 1st Place -->
+          <div class="podium-col">
+            <div class="podium-card podium-1">
+              <span class="podium-badge">🥇</span>
+              <div class="podium-name">{{ leaderboard[0].participant_name }}</div>
+              <div class="podium-score text-warning">{{ leaderboard[0].score }}/{{ leaderboard[0].total_questions }}</div>
+              <div class="small text-muted fw-bold">{{ leaderboard[0].percentage }}%</div>
+            </div>
+          </div>
+
+          <!-- 3rd Place -->
+          {% if leaderboard|length >= 3 %}
+            <div class="podium-col">
+              <div class="podium-card podium-3">
+                <span class="podium-badge">🥉</span>
+                <div class="podium-name">{{ leaderboard[2].participant_name }}</div>
+                <div class="podium-score">{{ leaderboard[2].score }}/{{ leaderboard[2].total_questions }}</div>
+                <div class="small text-muted fw-bold">{{ leaderboard[2].percentage }}%</div>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Full Ranks Table -->
+        <div class="quiz-card p-4">
+          <h4 class="fw-bold mb-3">All Participants ({{ leaderboard|length }})</h4>
+          <div class="table-responsive">
+            <table class="table leaderboard-table align-middle">
+              <thead>
+                <tr class="text-muted small text-uppercase">
+                  <th style="width: 70px;">Rank</th>
+                  <th>Friend Nickname</th>
+                  <th>Score</th>
+                  <th>Percentage</th>
+                  <th>Completed</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in leaderboard %}
+                  <tr class="leaderboard-row">
+                    <td class="leaderboard-cell">
+                      {% if item.rank == 1 %}🥇
+                      {% elif item.rank == 2 %}🥈
+                      {% elif item.rank == 3 %}🥉
+                      {% else %}
+                        <span class="badge bg-light text-dark rounded-pill">#{{ item.rank }}</span>
+                      {% endif %}
+                    </td>
+                    <td class="leaderboard-cell fw-bold">
+                      <div class="d-flex align-items-center gap-2">
+                        <span class="badge bg-light text-primary rounded-circle p-2" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;">
+                          {{ item.participant_name[:1]|upper }}
+                        </span>
+                        <span>{{ item.participant_name }}</span>
+                      </div>
+                    </td>
+                    <td class="leaderboard-cell fw-bold text-primary">
+                      {{ item.score }} / {{ item.total_questions }}
+                    </td>
+                    <td class="leaderboard-cell">
+                      <div class="d-flex align-items-center gap-2">
+                        <div class="progress flex-grow-1" style="height: 6px; width: 80px;">
+                          <div class="progress-bar bg-primary" style="width: {{ item.percentage }}%"></div>
+                        </div>
+                        <span class="small fw-bold">{{ item.percentage }}%</span>
+                      </div>
+                    </td>
+                    <td class="leaderboard-cell text-muted small">
+                      {{ item.completed_at }}
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      {% else %}
+        <!-- Empty State -->
+        <div class="quiz-card text-center p-5">
+          <div class="display-3 text-muted mb-3">😴</div>
+          <h3 class="fw-bold mb-2">No One Has Played Yet!</h3>
+          <p class="text-muted mb-4">Be the very first friend to take the quiz and claim the #1 Gold spot!</p>
+          <a href="{{ url_for('quiz.play_quiz_page', public_id=quiz.public_id) }}" class="btn btn-bond-primary btn-lg">
+            <i class="fa-solid fa-play me-2"></i> Be The First to Play!
+          </a>
+        </div>
+      {% endif %}
+
+      <!-- Bottom Banner -->
+      <div class="text-center mt-5">
+        <p class="text-muted">Want to see who knows you best?</p>
+        <a href="{{ url_for('quiz.create_quiz_page') }}" class="btn btn-bond-secondary">
+          <i class="fa-solid fa-wand-magic-sparkles me-2"></i> Create Your Own Quiz
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

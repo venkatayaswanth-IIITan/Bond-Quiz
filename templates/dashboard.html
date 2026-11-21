@@ -1,0 +1,408 @@
+{% extends 'base.html' %}
+
+{% block title %}Creator Dashboard – {{ quiz.title }}{% endblock %}
+
+{% block extra_head %}
+<style>
+  .avatar-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--primary-light);
+    color: var(--primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5" id="creatorDashboardApp" data-public-id="{{ quiz.public_id }}">
+  
+  <!-- Loading state -->
+  <div id="loadingState" class="text-center py-5">
+    <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
+    <h5 class="fw-bold text-muted">Loading private creator analytics...</h5>
+  </div>
+
+  <!-- Auth Prompt State (Shown if token missing or invalid) -->
+  <div id="authPromptState" class="row justify-content-center d-none">
+    <div class="col-md-6">
+      <div class="quiz-card text-center p-5">
+        <div class="display-3 mb-3">🔒</div>
+        <h3 class="fw-bold mb-2">Creator Access Required</h3>
+        <p class="text-muted mb-4">
+          This dashboard is private to the creator of <strong>{{ quiz.title }}</strong>. Please provide your secret Creator Token to view responses and edit this quiz.
+        </p>
+        <div class="mb-3 text-start">
+          <label class="form-label fw-bold">Creator Access Token</label>
+          <input type="password" id="manualTokenInput" class="form-control form-control-lg" placeholder="ctk_..." autofocus>
+          <div class="form-text">You received this token when you created the quiz.</div>
+        </div>
+        <button class="btn btn-bond-primary btn-lg w-100" onclick="submitAuthToken()">
+          <i class="fa-solid fa-unlock me-2"></i> Unlock Dashboard
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard Main Content -->
+  <div id="dashboardContent" class="d-none">
+    
+    <!-- Top Header Card -->
+    <div class="quiz-card mb-4 p-4">
+      <div class="row align-items-center g-3">
+        <div class="col-lg-7">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span id="quizStatusBadge" class="badge bg-success">Quiz Active</span>
+            <span class="badge badge-soft-primary">Creator Portal</span>
+          </div>
+          <h2 id="dashQuizTitle" class="fw-extrabold mb-1 display-6">
+            {{ quiz.title }}
+          </h2>
+          <p id="dashQuizDesc" class="text-muted small mb-0">
+            {{ quiz.description or 'No description provided.' }}
+          </p>
+        </div>
+
+        <div class="col-lg-5 text-lg-end">
+          <div class="d-flex flex-wrap align-items-center justify-content-lg-end gap-2">
+            <!-- Active/Closed Switch -->
+            <div class="form-check form-switch d-inline-flex align-items-center gap-2 me-2">
+              <input class="form-check-input fs-5" type="checkbox" id="quizStatusToggle" checked>
+              <label class="form-check-label fw-bold small text-muted" for="quizStatusToggle">Open for Submissions</label>
+            </div>
+            
+            <button class="btn btn-sm btn-bond-outline" data-bs-toggle="modal" data-bs-target="#editQuizModal">
+              <i class="fa-solid fa-pen-to-square me-1"></i> Edit Quiz
+            </button>
+            <button class="btn btn-sm btn-outline-danger" onclick="confirmDeleteQuiz()">
+              <i class="fa-solid fa-trash-can me-1"></i> Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Stats Metric Cards -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-3 col-sm-6">
+        <div class="stat-box">
+          <div class="stat-icon bg-light text-primary">
+            <i class="fa-solid fa-users"></i>
+          </div>
+          <div>
+            <div class="stat-number" id="statParticipants">0</div>
+            <div class="stat-label">Total Friends</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3 col-sm-6">
+        <div class="stat-box">
+          <div class="stat-icon bg-light text-success">
+            <i class="fa-solid fa-chart-pie"></i>
+          </div>
+          <div>
+            <div class="stat-number" id="statAvgScore">0/0</div>
+            <div class="stat-label">Average Score</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3 col-sm-6">
+        <div class="stat-box">
+          <div class="stat-icon bg-light text-warning">
+            <i class="fa-solid fa-trophy"></i>
+          </div>
+          <div>
+            <div class="stat-number" id="statHighScore">0/0</div>
+            <div class="stat-label">Highest Score</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3 col-sm-6">
+        <div class="stat-box">
+          <div class="stat-icon bg-light text-danger">
+            <i class="fa-solid fa-percent"></i>
+          </div>
+          <div>
+            <div class="stat-number" id="statAvgPct">0%</div>
+            <div class="stat-label">Average %</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <ul class="nav nav-pills mb-4 gap-2" id="dashboardTabs" role="tablist">
+      <li class="nav-item">
+        <button class="btn btn-bond-secondary active" data-bs-toggle="pill" data-bs-target="#tabLeaderboard">
+          <i class="fa-solid fa-trophy me-1"></i> Leaderboard
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="btn btn-bond-secondary" data-bs-toggle="pill" data-bs-target="#tabAttempts">
+          <i class="fa-solid fa-clipboard-list me-1"></i> Friend Answers Breakdown
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="btn btn-bond-secondary" data-bs-toggle="pill" data-bs-target="#tabQuestions">
+          <i class="fa-solid fa-list-check me-1"></i> Questions Management
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="btn btn-bond-secondary" data-bs-toggle="pill" data-bs-target="#tabShare">
+          <i class="fa-solid fa-share-nodes me-1"></i> Share & Links
+        </button>
+      </li>
+    </ul>
+
+    <!-- Tab Contents -->
+    <div class="tab-content">
+      
+      <!-- TAB 1: LEADERBOARD -->
+      <div class="tab-pane fade show active" id="tabLeaderboard">
+        <div class="quiz-card p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="fw-bold mb-0">Leaderboard Standings</h4>
+            <button class="btn btn-sm btn-outline-secondary" onclick="loadDashboard()">
+              <i class="fa-solid fa-rotate-right me-1"></i> Refresh
+            </button>
+          </div>
+          <div id="dashLeaderboardBody"></div>
+        </div>
+      </div>
+
+      <!-- TAB 2: DETAILED FRIEND ANSWERS -->
+      <div class="tab-pane fade" id="tabAttempts">
+        <div class="quiz-card p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <h4 class="fw-bold mb-0">Individual Friend Responses</h4>
+              <p class="text-muted small mb-0">Inspect what exact option each friend selected for every question!</p>
+            </div>
+            <button class="btn btn-sm btn-outline-secondary" onclick="loadParticipantAttempts()">
+              <i class="fa-solid fa-rotate-right me-1"></i> Refresh
+            </button>
+          </div>
+          <div id="dashAttemptsBody"></div>
+        </div>
+      </div>
+
+      <!-- TAB 3: QUESTIONS MANAGEMENT -->
+      <div class="tab-pane fade" id="tabQuestions">
+        <div class="quiz-card p-4">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+              <h4 class="fw-bold mb-0">Quiz Questions & Correct Answers</h4>
+              <p class="text-muted small mb-0">Green badges indicate the correct answer you selected.</p>
+            </div>
+            <button class="btn btn-bond-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addQuestionModal">
+              <i class="fa-solid fa-plus me-1"></i> Add Question
+            </button>
+          </div>
+          <div id="dashQuestionsList"></div>
+        </div>
+      </div>
+
+      <!-- TAB 4: SHARE & LINKS -->
+      <div class="tab-pane fade" id="tabShare">
+        <div class="quiz-card p-4">
+          <h4 class="fw-bold mb-4">Sharing & Access Toolbox</h4>
+          
+          <div class="row g-4">
+            <div class="col-md-7">
+              <!-- Public Quiz Link -->
+              <div class="mb-4">
+                <label class="form-label fw-bold text-muted small text-uppercase">
+                  <i class="fa-solid fa-link text-primary me-1"></i> Public Quiz Link (Share with Friends)
+                </label>
+                <div class="input-group">
+                  <input type="text" id="dashPublicUrl" class="form-control" readonly>
+                  <button class="btn btn-bond-primary" onclick="copyToClipboard(document.getElementById('dashPublicUrl').value, this)">
+                    <i class="fa-regular fa-copy me-1"></i> Copy
+                  </button>
+                </div>
+              </div>
+
+              <!-- Social Sharing Buttons -->
+              <div class="d-flex flex-wrap gap-2 mb-4">
+                <button id="dashShareWhatsApp" class="btn btn-success fw-bold">
+                  <i class="fa-brands fa-whatsapp me-2"></i> Share on WhatsApp
+                </button>
+                <button class="btn btn-bond-secondary fw-bold" onclick="shareQuizNative(dashboardQuiz.title, 'Test our bond on BondQuiz!', document.getElementById('dashPublicUrl').value)">
+                  <i class="fa-solid fa-share-nodes me-2"></i> Share via App...
+                </button>
+              </div>
+
+              <hr>
+
+              <!-- Secret Creator Dashboard Link -->
+              <div class="card p-3 bg-light border-warning">
+                <label class="form-label fw-bold text-warning-emphasis small mb-1">
+                  <i class="fa-solid fa-key me-1"></i> Private Creator Dashboard Link
+                </label>
+                <div class="small text-muted mb-2">Save or bookmark this link so you can manage this quiz anytime.</div>
+                <div class="input-group input-group-sm">
+                  <input type="text" id="dashPrivateUrl" class="form-control" readonly>
+                  <button class="btn btn-outline-dark" onclick="copyToClipboard(document.getElementById('dashPrivateUrl').value, this)">
+                    Copy
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-5 text-center">
+              <h6 class="fw-bold text-muted mb-2">QR Code for Instant Scanning</h6>
+              <div id="dashQrCodeContainer" class="p-3 bg-white rounded-3 shadow-sm d-inline-block border"></div>
+              <div class="small text-muted mt-2">Friends can scan with their phone camera to open the quiz instantly!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- New Quiz Celebration Modal -->
+<div class="modal fade" id="newQuizSuccessModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 p-4 text-center shadow-lg">
+      <div class="display-3 mb-2">🎉</div>
+      <h3 class="fw-extrabold mb-1">Your BondQuiz is Live!</h3>
+      <p class="text-muted small mb-4">
+        Share this unique link with your friends to see who knows you best!
+      </p>
+
+      <!-- Public Link -->
+      <div class="card p-3 bg-light rounded-4 border-0 mb-3 text-start">
+        <label class="form-label fw-bold text-muted small text-uppercase mb-1">
+          <i class="fa-solid fa-link text-primary me-1"></i> Public Quiz Link (Share with Friends)
+        </label>
+        <div class="input-group">
+          <input type="text" id="newQuizModalUrl" class="form-control fw-bold bg-white" readonly>
+          <button class="btn btn-bond-primary" onclick="copyToClipboard(document.getElementById('newQuizModalUrl').value, this)">
+            <i class="fa-regular fa-copy me-1"></i> Copy
+          </button>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="d-flex flex-wrap gap-2 justify-content-center mb-3">
+        <button id="newQuizModalWaBtn" class="btn btn-success rounded-pill px-4 fw-bold">
+          <i class="fa-brands fa-whatsapp me-2 fs-5"></i> Share on WhatsApp
+        </button>
+        <button id="newQuizModalShareBtn" class="btn btn-bond-secondary rounded-pill px-3 fw-bold">
+          <i class="fa-solid fa-share-nodes me-1"></i> Share...
+        </button>
+      </div>
+
+      <!-- QR Code -->
+      <div class="mb-3">
+        <div id="newQuizModalQrCode" class="d-inline-block p-2 bg-white rounded-3 shadow-sm border"></div>
+        <div class="text-muted small mt-1">Friends can scan with their phone camera to play</div>
+      </div>
+
+      <button type="button" class="btn btn-bond-primary rounded-pill w-100 py-2 fw-bold" data-bs-dismiss="modal">
+        View My Live Leaderboard <i class="fa-solid fa-arrow-right ms-1"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Quiz Details Modal -->
+<div class="modal fade" id="editQuizModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title fw-bold">Edit Quiz Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="mb-3">
+          <label class="form-label fw-bold">Quiz Title</label>
+          <input type="text" id="editQuizTitle" class="form-control" value="{{ quiz.title }}">
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-bold">Description</label>
+          <textarea id="editQuizDesc" class="form-control" rows="2">{{ quiz.description or '' }}</textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-bold">Theme</label>
+          <select id="editQuizTheme" class="form-select">
+            <option value="purple_bliss" {% if quiz.theme == 'purple_bliss' %}selected{% endif %}>Purple Bliss</option>
+            <option value="sunset_glow" {% if quiz.theme == 'sunset_glow' %}selected{% endif %}>Sunset Glow</option>
+            <option value="cyber_neon" {% if quiz.theme == 'cyber_neon' %}selected{% endif %}>Cyber Neon</option>
+            <option value="bubblegum" {% if quiz.theme == 'bubblegum' %}selected{% endif %}>Bubblegum Pop</option>
+            <option value="midnight_velvet" {% if quiz.theme == 'midnight_velvet' %}selected{% endif %}>Midnight Velvet</option>
+            <option value="emerald_mint" {% if quiz.theme == 'emerald_mint' %}selected{% endif %}>Emerald Mint</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer border-0 pt-0">
+        <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-bond-primary" onclick="submitEditQuiz()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Question to Live Quiz Modal -->
+<div class="modal fade" id="addQuestionModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title fw-bold">Add Question to Quiz</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="mb-3">
+          <label class="form-label fw-bold">Question Text</label>
+          <input type="text" id="newQText" class="form-control" placeholder="e.g. What's my favorite dessert?">
+        </div>
+        <label class="form-label fw-bold small text-muted">Options (Select radio for correct answer):</label>
+        <div class="d-flex flex-column gap-2">
+          <div class="input-group">
+            <div class="input-group-text bg-white">
+              <input type="radio" name="newQCorrect" value="0" checked>
+            </div>
+            <input type="text" id="newQOpt1" class="form-control" placeholder="Option 1">
+          </div>
+          <div class="input-group">
+            <div class="input-group-text bg-white">
+              <input type="radio" name="newQCorrect" value="1">
+            </div>
+            <input type="text" id="newQOpt2" class="form-control" placeholder="Option 2">
+          </div>
+          <div class="input-group">
+            <div class="input-group-text bg-white">
+              <input type="radio" name="newQCorrect" value="2">
+            </div>
+            <input type="text" id="newQOpt3" class="form-control" placeholder="Option 3 (optional)">
+          </div>
+          <div class="input-group">
+            <div class="input-group-text bg-white">
+              <input type="radio" name="newQCorrect" value="3">
+            </div>
+            <input type="text" id="newQOpt4" class="form-control" placeholder="Option 4 (optional)">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer border-0 pt-0">
+        <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-bond-primary" onclick="submitAddQuestion()">Add Question</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}?v=3.0"></script>
+{% endblock %}
