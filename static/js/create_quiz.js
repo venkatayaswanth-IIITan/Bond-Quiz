@@ -432,8 +432,6 @@ async function submitQuizGeneration() {
     submitBtn.className = 'btn btn-bond-primary btn-lg';
     submitBtn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles me-2"></i> Generate & Share Quiz`;
   }
-    submitBtn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles me-2"></i> Generate & Share Quiz`;
-  }
 }
 
 function renderSuccessScreen(result) {
