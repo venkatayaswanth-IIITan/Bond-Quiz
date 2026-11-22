@@ -1,6 +1,35 @@
 {% extends 'base.html' %}
 
-{% block title %}BondQuiz – How Well Do Your Friends Really Know You?{% endblock %}
+{% block title %}BondQuiz – Create Fun Friendship Quizzes & Discover Who Knows You Best{% endblock %}
+
+{% block meta_description %}Create fun friendship quizzes on BondQuiz! Challenge your best friends, couple, crush or family, share via a unique link or WhatsApp, and discover who knows you best on the live leaderboard.{% endblock %}
+
+{% block canonical_url %}https://bond-quiz-1.onrender.com/{% endblock %}
+
+{% block og_title %}BondQuiz – Create Fun Friendship Quizzes & Discover Who Knows You Best{% endblock %}
+{% block og_description %}How well do your friends really know you? Create a personalized quiz, share it with your besties, and discover who tops the leaderboard!{% endblock %}
+{% block og_url %}https://bond-quiz-1.onrender.com/{% endblock %}
+
+{% block extra_head %}
+<!-- JSON-LD Structured Data for Google Search -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "BondQuiz",
+  "url": "https://bond-quiz-1.onrender.com/",
+  "description": "BondQuiz – Create fun friendship quizzes and discover who knows you best. Challenge your best friends, couple, crush, or family with live leaderboards.",
+  "applicationCategory": "SocialGameApplication",
+  "operatingSystem": "All",
+  "inLanguage": "en",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+{% endblock %}
 
 {% block content %}
 <!-- Hero Section -->
@@ -18,7 +47,7 @@
         </h1>
         
         <p class="hero-subtitle">
-          Create a fun quiz, share it with your friends and discover who knows you best!
+          <strong>BondQuiz</strong> – Create fun friendship quizzes and discover who knows you best! Share with your best friends, couple, crush, or family with live leaderboards.
         </p>
 
         <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start align-items-center mb-4">

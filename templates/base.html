@@ -7,7 +7,32 @@
   <!-- Google Site Verification -->
   <meta name="google-site-verification" content="FkGajWtj6EQhtar92w0fYD53RZLtyt6i_yiyrivGE3M">
 
-  <title>{% block title %}BondQuiz – How Well Do You Know Me?{% endblock %}</title>
+  <!-- Primary SEO Metadata -->
+  <title>{% block title %}BondQuiz – Create Fun Friendship Quizzes & Discover Who Knows You Best{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}Create fun personalized friendship quizzes on BondQuiz! Challenge your best friends, couple, crush or family, share via a unique link or WhatsApp, and discover who knows you best with live leaderboards.{% endblock %}">
+  <meta name="keywords" content="{% block meta_keywords %}friendship quiz, best friend quiz, couple quiz, friends quiz, crush quiz, family quiz, online friendship challenge, how well do you know me, bond quiz, bff quiz{% endblock %}">
+  <meta name="author" content="BondQuiz">
+  <meta name="robots" content="{% block meta_robots %}index, follow{% endblock %}">
+  <link rel="canonical" href="{% block canonical_url %}https://bond-quiz-1.onrender.com{{ request.path }}{% endblock %}">
+
+  <!-- Open Graph / Facebook / WhatsApp -->
+  <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+  <meta property="og:site_name" content="BondQuiz">
+  <meta property="og:url" content="{% block og_url %}https://bond-quiz-1.onrender.com{{ request.path }}{% endblock %}">
+  <meta property="og:title" content="{% block og_title %}BondQuiz – Create Fun Friendship Quizzes & Discover Who Knows You Best{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}How well do your friends really know you? Create a personalized quiz, share it with your besties, and discover who tops the leaderboard!{% endblock %}">
+  <meta property="og:image" content="{% block og_image %}https://bond-quiz-1.onrender.com/static/images/bondquiz-og.png{% endblock %}">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="{% block twitter_url %}https://bond-quiz-1.onrender.com{{ request.path }}{% endblock %}">
+  <meta name="twitter:title" content="{% block twitter_title %}BondQuiz – Create Fun Friendship Quizzes & Discover Who Knows You Best{% endblock %}">
+  <meta name="twitter:description" content="{% block twitter_description %}How well do your friends really know you? Create a personalized quiz, share with your besties, and discover who tops the leaderboard!{% endblock %}">
+  <meta name="twitter:image" content="{% block twitter_image %}https://bond-quiz-1.onrender.com/static/images/bondquiz-og.png{% endblock %}">
+
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#9333ea">
   
   <!-- Favicon / Emoji Icon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💖</text></svg>">

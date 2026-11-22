@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 
 {% block title %}Leaderboard – {{ quiz.title }} – BondQuiz{% endblock %}
+{% block meta_description %}Live leaderboard for {{ quiz.title }} by {{ quiz.creator_name }}. See who ranks Gold 🥇, Silver 🥈, and Bronze 🥉!{% endblock %}
+{% block canonical_url %}https://bond-quiz-1.onrender.com/quiz/{{ quiz.public_id }}/leaderboard{% endblock %}
 
 {% block body_class %}theme-{{ quiz.theme }}{% endblock %}
 

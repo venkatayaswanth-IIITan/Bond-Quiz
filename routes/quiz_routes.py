@@ -1,4 +1,5 @@
-from flask import Blueprint, request, jsonify, render_template, abort, url_for
+from datetime import datetime, timezone
+from flask import Blueprint, request, jsonify, render_template, abort, url_for, Response
 from models import Quiz, Question, Option, Attempt, Answer, db
 from services.quiz_service import (
     create_quiz_with_questions,
@@ -40,6 +41,75 @@ def public_leaderboard_page(public_id):
     quiz = Quiz.query.filter_by(public_id=public_id).first_or_404()
     leaderboard = get_leaderboard_data(quiz)
     return render_template('leaderboard.html', quiz=quiz, leaderboard=leaderboard)
+
+
+# ==========================================
+# SEO & CRAWLER ENDPOINTS
+# ==========================================
+
+@quiz_bp.route('/robots.txt', methods=['GET'])
+def robots_txt():
+    """Serves robots.txt instructing web crawlers."""
+    content = """User-agent: *
+Allow: /
+Allow: /create
+Allow: /quiz/
+Allow: /static/
+Disallow: /creator/
+Disallow: /api/
+
+Sitemap: https://bond-quiz-1.onrender.com/sitemap.xml
+"""
+    response = Response(content, mimetype='text/plain')
+    response.headers['Content-Type'] = 'text/plain; charset=utf-8'
+    return response
+
+
+@quiz_bp.route('/sitemap.xml', methods=['GET'])
+def sitemap_xml():
+    """Generates valid XML sitemap for Google Search Console."""
+    base_url = "https://bond-quiz-1.onrender.com"
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+    urls = [
+        {"loc": f"{base_url}/", "lastmod": today, "changefreq": "daily", "priority": "1.0"},
+        {"loc": f"{base_url}/create", "lastmod": today, "changefreq": "weekly", "priority": "0.9"},
+    ]
+
+    # Include public active quizzes and their leaderboards
+    try:
+        active_quizzes = Quiz.query.filter_by(is_active=True).order_by(Quiz.created_at.desc()).limit(200).all()
+        for q in active_quizzes:
+            q_date = q.created_at.strftime("%Y-%m-%d") if q.created_at else today
+            urls.append({
+                "loc": f"{base_url}/quiz/{q.public_id}",
+                "lastmod": q_date,
+                "changefreq": "weekly",
+                "priority": "0.7"
+            })
+            urls.append({
+                "loc": f"{base_url}/quiz/{q.public_id}/leaderboard",
+                "lastmod": q_date,
+                "changefreq": "daily",
+                "priority": "0.6"
+            })
+    except Exception:
+        pass
+
+    xml_lines = ['<?xml version="1.0" encoding="UTF-8"?>']
+    xml_lines.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
+    for u in urls:
+        xml_lines.append('  <url>')
+        xml_lines.append(f'    <loc>{u["loc"]}</loc>')
+        xml_lines.append(f'    <lastmod>{u["lastmod"]}</lastmod>')
+        xml_lines.append(f'    <changefreq>{u["changefreq"]}</changefreq>')
+        xml_lines.append(f'    <priority>{u["priority"]}</priority>')
+        xml_lines.append('  </url>')
+    xml_lines.append('</urlset>')
+
+    response = Response("\n".join(xml_lines), mimetype='application/xml')
+    response.headers['Content-Type'] = 'application/xml; charset=utf-8'
+    return response
 
 
 # ==========================================

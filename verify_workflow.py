@@ -174,7 +174,39 @@ def test_api():
     assert del_res.status == 200
     print("✅ 11. Deleted test quiz and cascaded all records.")
 
-    print("\n🎉 ALL 11 END-TO-END WORKFLOW CHECKS PASSED PERFECTLY!")
+    # 12. Verify Google Site Verification Tag & SEO Metadata
+    req_home = urllib.request.urlopen(f"{BASE_URL}/")
+    home_content = req_home.read().decode('utf-8')
+    assert 'name="google-site-verification" content="FkGajWtj6EQhtar92w0fYD53RZLtyt6i_yiyrivGE3M"' in home_content
+    assert 'rel="canonical" href="https://bond-quiz-1.onrender.com/"' in home_content
+    assert 'name="robots" content="index, follow"' in home_content
+    assert 'property="og:site_name" content="BondQuiz"' in home_content
+    assert '"@type": "WebApplication"' in home_content
+    print("✅ 12. Verified Google Search Console tag, canonical URL, and SEO structured data.")
+
+    # 13. Verify robots.txt
+    req_robots = urllib.request.urlopen(f"{BASE_URL}/robots.txt")
+    assert req_robots.status == 200
+    assert 'text/plain' in req_robots.headers.get('Content-Type')
+    robots_data = req_robots.read().decode('utf-8')
+    assert 'User-agent: *' in robots_data
+    assert 'Disallow: /creator/' in robots_data
+    assert 'Disallow: /api/' in robots_data
+    assert 'Sitemap: https://bond-quiz-1.onrender.com/sitemap.xml' in robots_data
+    print("✅ 13. Verified /robots.txt with correct crawler rules and sitemap pointer.")
+
+    # 14. Verify sitemap.xml
+    req_sitemap = urllib.request.urlopen(f"{BASE_URL}/sitemap.xml")
+    assert req_sitemap.status == 200
+    assert 'xml' in req_sitemap.headers.get('Content-Type')
+    sitemap_data = req_sitemap.read().decode('utf-8')
+    assert '<?xml version="1.0" encoding="UTF-8"?>' in sitemap_data
+    assert '<urlset' in sitemap_data
+    assert '<loc>https://bond-quiz-1.onrender.com/</loc>' in sitemap_data
+    assert '<loc>https://bond-quiz-1.onrender.com/create</loc>' in sitemap_data
+    print("✅ 14. Verified /sitemap.xml returns valid XML format.")
+
+    print("\n🎉 ALL 14 END-TO-END WORKFLOW CHECKS PASSED PERFECTLY!")
 
 if __name__ == '__main__':
     test_api()

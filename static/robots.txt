@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Allow: /create
+Allow: /quiz/
+Allow: /static/
+Disallow: /creator/
+Disallow: /api/
+
+Sitemap: https://bond-quiz-1.onrender.com/sitemap.xml

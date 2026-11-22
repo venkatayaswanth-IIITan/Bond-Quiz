@@ -303,5 +303,51 @@ class BondQuizEndToEndTestCase(unittest.TestCase):
         self.assertEqual(del_res.status_code, 200)
         self.assertIsNone(Quiz.query.filter_by(public_id=public_id).first())
 
+    def test_05_seo_metadata_and_search_console_tag(self):
+        """Verify Google verification tag, canonical URLs, and Open Graph metadata."""
+        res = self.client.get('/')
+        self.assertEqual(res.status_code, 200)
+        html = res.data.decode('utf-8')
+
+        # Google Search Console Verification Tag
+        self.assertIn('name="google-site-verification" content="FkGajWtj6EQhtar92w0fYD53RZLtyt6i_yiyrivGE3M"', html)
+
+        # Primary SEO & Canonical URL
+        self.assertIn('rel="canonical" href="https://bond-quiz-1.onrender.com/"', html)
+        self.assertIn('name="robots" content="index, follow"', html)
+        self.assertIn('name="description"', html)
+
+        # Open Graph & Twitter Cards
+        self.assertIn('property="og:site_name" content="BondQuiz"', html)
+        self.assertIn('property="og:url" content="https://bond-quiz-1.onrender.com/"', html)
+        self.assertIn('name="twitter:card"', html)
+
+        # Schema.org Structured Data
+        self.assertIn('"@context": "https://schema.org"', html)
+        self.assertIn('"@type": "WebApplication"', html)
+
+    def test_06_robots_and_sitemap_endpoints(self):
+        """Verify robots.txt and sitemap.xml endpoints for search engine crawling."""
+        # 1. robots.txt
+        res_robots = self.client.get('/robots.txt')
+        self.assertEqual(res_robots.status_code, 200)
+        self.assertTrue('text/plain' in res_robots.content_type)
+        robots_txt = res_robots.data.decode('utf-8')
+        self.assertIn('User-agent: *', robots_txt)
+        self.assertIn('Allow: /', robots_txt)
+        self.assertIn('Disallow: /creator/', robots_txt)
+        self.assertIn('Disallow: /api/', robots_txt)
+        self.assertIn('Sitemap: https://bond-quiz-1.onrender.com/sitemap.xml', robots_txt)
+
+        # 2. sitemap.xml
+        res_sitemap = self.client.get('/sitemap.xml')
+        self.assertEqual(res_sitemap.status_code, 200)
+        self.assertTrue('xml' in res_sitemap.content_type)
+        sitemap_xml = res_sitemap.data.decode('utf-8')
+        self.assertIn('<?xml version="1.0" encoding="UTF-8"?>', sitemap_xml)
+        self.assertIn('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">', sitemap_xml)
+        self.assertIn('<loc>https://bond-quiz-1.onrender.com/</loc>', sitemap_xml)
+        self.assertIn('<loc>https://bond-quiz-1.onrender.com/create</loc>', sitemap_xml)
+
 if __name__ == '__main__':
     unittest.main()
