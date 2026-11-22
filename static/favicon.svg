@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Background Gradient: Vibrant Blue to Purple -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4F46E5"/>
+      <stop offset="45%" stop-color="#7C3AED"/>
+      <stop offset="100%" stop-color="#9333EA"/>
+    </linearGradient>
+
+    <!-- Heart Symbol Gradient: Hot Pink to Coral Pink -->
+    <linearGradient id="heartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FB7185"/>
+      <stop offset="50%" stop-color="#F43F5E"/>
+      <stop offset="100%" stop-color="#EC4899"/>
+    </linearGradient>
+
+    <!-- Subtle Drop Shadow -->
+    <filter id="glowShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+
+    <filter id="heartShadow" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#4C0519" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Squircle Base with Blue-Purple Gradient -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)"/>
+
+  <!-- Subtle Modern Inner Glow / Highlight Stroke -->
+  <rect x="6" y="6" width="500" height="500" rx="106" fill="none" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="6"/>
+
+  <!-- Bold White 'BQ' Typography -->
+  <!-- BQ letters centered with high readability even at 16x16 / 32x32 -->
+  <g filter="url(#glowShadow)">
+    <text x="210" y="340"
+          font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+          font-size="235"
+          font-weight="900"
+          letter-spacing="-8"
+          fill="#FFFFFF"
+          text-anchor="middle">BQ</text>
+  </g>
+
+  <!-- Small Heart Symbol with Question Mark Accent (Top-Right) -->
+  <g transform="translate(378, 120) scale(0.95)" filter="url(#heartShadow)">
+    <!-- Heart Shape -->
+    <path d="M0 32 C-2 32 -32 6 -32 -16 C-32 -32 -18 -44 0 -26 C18 -44 32 -32 32 -16 C32 6 2 32 0 32 Z"
+          fill="url(#heartGrad)"
+          stroke="#FFFFFF"
+          stroke-width="3"
+          stroke-linejoin="round"/>
+    <!-- Question Mark inside the Heart -->
+    <text x="0" y="-8"
+          font-family="system-ui, -apple-system, 'Segoe UI', sans-serif"
+          font-size="28"
+          font-weight="900"
+          fill="#FFFFFF"
+          text-anchor="middle">?</text>
+  </g>
+</svg>
