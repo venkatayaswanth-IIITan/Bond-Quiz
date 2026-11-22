@@ -423,10 +423,10 @@ async function submitQuizGeneration() {
     // Play celebrations
     try {
       if (window.soundFX) window.soundFX.playFanfare();
-    } catch (e) {}
+    } catch (e) { }
     try {
       if (typeof launchCelebrationConfetti === 'function') launchCelebrationConfetti();
-    } catch (e) {}
+    } catch (e) { }
 
     // Show Step 4 (Success / Share Screen) immediately so creator gets links!
     renderSuccessScreen(result, title);
