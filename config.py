@@ -20,4 +20,4 @@ class Config:
     MIN_QUESTIONS_PER_QUIZ = 3
     MAX_OPTIONS_PER_QUESTION = 4
     TOKEN_SALT = os.environ.get('TOKEN_SALT', 'bondquiz-salt-secure-2026')
-    GOOGLE_SITE_VERIFICATION = os.environ.get('GOOGLE_SITE_VERIFICATION', '')
+    GOOGLE_SITE_VERIFICATION = os.environ.get('GOOGLE_SITE_VERIFICATION', 'FkGajWtj6EQhtar92w0fYD53RZLtyt6i_yiyrivGE3M')
