@@ -87,7 +87,7 @@
               🐱
             </div>
             <div>
-              <h5 class="fw-bold mb-0">How well do you know Alex?</h5>
+              <div class="fw-bold fs-5 mb-0">How well do you know Alex?</div>
               <small class="text-muted">7 Questions • 2 mins</small>
             </div>
           </div>
@@ -127,7 +127,7 @@
           <span class="badge badge-soft-primary mb-1">
             <i class="fa-solid fa-crown text-warning me-1"></i> Creator Hub
           </span>
-          <h3 class="fw-extrabold mb-1">Your Quizzes & Live Leaderboards</h3>
+          <h2 class="fw-extrabold fs-4 mb-1">Your Quizzes & Live Leaderboards</h2>
           <p class="text-muted small mb-0">Jump directly into your live leaderboards or check what your friends answered!</p>
         </div>
         <a href="{{ url_for('quiz.create_quiz_page') }}" class="btn btn-bond-primary btn-sm rounded-pill mt-2 mt-md-0">
@@ -153,7 +153,7 @@
       <div class="col-md-4 col-sm-6">
         <a href="{{ url_for('quiz.create_quiz_page', category='best_friend') }}" class="category-card">
           <div class="category-icon-box">🏆</div>
-          <h4 class="fw-bold mb-2">Best Friend Challenge</h4>
+          <h3 class="fw-bold fs-5 mb-2">Best Friend Challenge</h3>
           <p class="text-muted small mb-3">Test which of your besties actually knows your deepest secrets, pet peeves, and cravings.</p>
           <span class="badge badge-soft-primary">Start Bestie Quiz <i class="fa-solid fa-arrow-right ms-1"></i></span>
         </a>
@@ -163,7 +163,7 @@
       <div class="col-md-4 col-sm-6">
         <a href="{{ url_for('quiz.create_quiz_page', category='couple') }}" class="category-card">
           <div class="category-icon-box">💕</div>
-          <h4 class="fw-bold mb-2">Couple Quiz</h4>
+          <h3 class="fw-bold fs-5 mb-2">Couple Quiz</h3>
           <p class="text-muted small mb-3">Does your boyfriend or girlfriend remember your favorite dates, love languages, and habits?</p>
           <span class="badge badge-soft-secondary">Start Couple Quiz <i class="fa-solid fa-arrow-right ms-1"></i></span>
         </a>
@@ -173,7 +173,7 @@
       <div class="col-md-4 col-sm-6">
         <a href="{{ url_for('quiz.create_quiz_page', category='friends') }}" class="category-card">
           <div class="category-icon-box">🎉</div>
-          <h4 class="fw-bold mb-2">Friendship Quiz</h4>
+          <h3 class="fw-bold fs-5 mb-2">Friendship Quiz</h3>
           <p class="text-muted small mb-3">The ultimate vibe check for your whole friend group chat. Find out who the real ones are!</p>
           <span class="badge badge-soft-primary">Start Friends Quiz <i class="fa-solid fa-arrow-right ms-1"></i></span>
         </a>
@@ -183,7 +183,7 @@
       <div class="col-md-4 col-sm-6">
         <a href="{{ url_for('quiz.create_quiz_page', category='crush') }}" class="category-card">
           <div class="category-icon-box">💘</div>
-          <h4 class="fw-bold mb-2">Crush Quiz</h4>
+          <h3 class="fw-bold fs-5 mb-2">Crush Quiz</h3>
           <p class="text-muted small mb-3">Send this to your crush to playfully break the ice and see if sparks are really flying!</p>
           <span class="badge badge-soft-secondary">Start Crush Quiz <i class="fa-solid fa-arrow-right ms-1"></i></span>
         </a>
@@ -193,7 +193,7 @@
       <div class="col-md-4 col-sm-6">
         <a href="{{ url_for('quiz.create_quiz_page', category='family') }}" class="category-card">
           <div class="category-icon-box">🏡</div>
-          <h4 class="fw-bold mb-2">Family Quiz</h4>
+          <h3 class="fw-bold fs-5 mb-2">Family Quiz</h3>
           <p class="text-muted small mb-3">Put your siblings and parents to the test with funny childhood memories and family trivia.</p>
           <span class="badge badge-soft-primary">Start Family Quiz <i class="fa-solid fa-arrow-right ms-1"></i></span>
         </a>
@@ -203,7 +203,7 @@
       <div class="col-md-4 col-sm-6">
         <a href="{{ url_for('quiz.create_quiz_page', category='custom') }}" class="category-card">
           <div class="category-icon-box">⚡</div>
-          <h4 class="fw-bold mb-2">Custom Challenge</h4>
+          <h3 class="fw-bold fs-5 mb-2">Custom Challenge</h3>
           <p class="text-muted small mb-3">Build your own 100% custom quiz with completely unique questions, crazy options, and themes!</p>
           <span class="badge badge-soft-primary">Create Custom Quiz <i class="fa-solid fa-arrow-right ms-1"></i></span>
         </a>
@@ -227,7 +227,7 @@
           <div style="width: 70px; height: 70px; border-radius: 50%; background: var(--primary-light); color: var(--primary); font-size: 1.8rem; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
             1
           </div>
-          <h4 class="fw-bold mb-2">Pick Questions & Answers</h4>
+          <h3 class="fw-bold fs-5 mb-2">Pick Questions & Answers</h3>
           <p class="text-muted">Select from our pre-made question bank or write your own custom questions. Pick your correct secret answer.</p>
         </div>
       </div>
@@ -237,7 +237,7 @@
           <div style="width: 70px; height: 70px; border-radius: 50%; background: var(--secondary-light); color: var(--secondary); font-size: 1.8rem; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
             2
           </div>
-          <h4 class="fw-bold mb-2">Share Your Secret Link</h4>
+          <h3 class="fw-bold fs-5 mb-2">Share Your Secret Link</h3>
           <p class="text-muted">Copy your unique quiz link or share directly to WhatsApp, Instagram Stories, Snapchat, or iMessage.</p>
         </div>
       </div>
@@ -247,7 +247,7 @@
           <div style="width: 70px; height: 70px; border-radius: 50%; background: #FEF3C7; color: #D97706; font-size: 1.8rem; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
             3
           </div>
-          <h4 class="fw-bold mb-2">Check the Leaderboard</h4>
+          <h3 class="fw-bold fs-5 mb-2">Check the Leaderboard</h3>
           <p class="text-muted">Watch friends submit their answers in real-time. See who ranks 🥇 Gold and read what hilarious answers they chose!</p>
         </div>
       </div>
@@ -275,7 +275,7 @@
           <div class="d-flex align-items-center gap-2 mb-3">
             <span class="badge bg-danger rounded-pill">Spicy & Fun</span>
           </div>
-          <h5 class="fw-bold mb-3">"What makes me instantly angry?"</h5>
+          <h3 class="fw-bold fs-5 mb-3">"What makes me instantly angry?"</h3>
           <ul class="list-unstyled text-muted small d-flex flex-column gap-2 mb-4">
             <li><i class="fa-regular fa-circle-dot text-primary me-2"></i> Loud chewers or bad manners</li>
             <li><i class="fa-regular fa-circle-dot text-primary me-2"></i> People being 30 mins late</li>
@@ -293,7 +293,7 @@
           <div class="d-flex align-items-center gap-2 mb-3">
             <span class="badge bg-primary rounded-pill">Dream & Vibe</span>
           </div>
-          <h5 class="fw-bold mb-3">"What's my dream bucket list trip?"</h5>
+          <h3 class="fw-bold fs-5 mb-3">"What's my dream bucket list trip?"</h3>
           <ul class="list-unstyled text-muted small d-flex flex-column gap-2 mb-4">
             <li><i class="fa-regular fa-circle-dot text-primary me-2"></i> Cherry blossoms in Tokyo, Japan 🌸</li>
             <li><i class="fa-regular fa-circle-dot text-primary me-2"></i> Sunset beach villa in Bali 🏝️</li>
@@ -311,7 +311,7 @@
           <div class="d-flex align-items-center gap-2 mb-3">
             <span class="badge bg-warning text-dark rounded-pill">Late Night Talks</span>
           </div>
-          <h5 class="fw-bold mb-3">"If I had $1M, what's my first purchase?"</h5>
+          <h3 class="fw-bold fs-5 mb-3">"If I had $1M, what's my first purchase?"</h3>
           <ul class="list-unstyled text-muted small d-flex flex-column gap-2 mb-4">
             <li><i class="fa-regular fa-circle-dot text-primary me-2"></i> Nonstop travel around the globe ✈️</li>
             <li><i class="fa-regular fa-circle-dot text-primary me-2"></i> A dream aesthetic smart house 🏡</li>
@@ -343,7 +343,7 @@
             <i class="fa-solid fa-lock-open"></i>
           </div>
           <div>
-            <h5 class="fw-bold mb-1">Zero Signups</h5>
+            <h3 class="fw-bold fs-6 mb-1">Zero Signups</h3>
             <p class="text-muted small mb-0">Neither you nor your friends need an account or email to play. Just click and go!</p>
           </div>
         </div>
@@ -355,7 +355,7 @@
             <i class="fa-solid fa-shield-virus"></i>
           </div>
           <div>
-            <h5 class="fw-bold mb-1">Anti-Cheat Engine</h5>
+            <h3 class="fw-bold fs-6 mb-1">Anti-Cheat Engine</h3>
             <p class="text-muted small mb-0">Answers are scored strictly on the server. Inspect Element won't reveal the answers!</p>
           </div>
         </div>
@@ -367,7 +367,7 @@
             <i class="fa-solid fa-trophy"></i>
           </div>
           <div>
-            <h5 class="fw-bold mb-1">Real-time Leaderboard</h5>
+            <h3 class="fw-bold fs-6 mb-1">Real-time Leaderboard</h3>
             <p class="text-muted small mb-0">Ranks automatically update with Gold, Silver, and Bronze trophies for the top 3 besties.</p>
           </div>
         </div>
@@ -379,7 +379,7 @@
             <i class="fa-solid fa-palette"></i>
           </div>
           <div>
-            <h5 class="fw-bold mb-1">6 Aesthetic Themes</h5>
+            <h3 class="fw-bold fs-6 mb-1">6 Aesthetic Themes</h3>
             <p class="text-muted small mb-0">Choose from Purple Bliss, Sunset Glow, Cyber Neon, Bubblegum, Midnight Velvet, and Emerald.</p>
           </div>
         </div>
@@ -391,7 +391,7 @@
             <i class="fa-brands fa-whatsapp"></i>
           </div>
           <div>
-            <h5 class="fw-bold mb-1">1-Click WhatsApp Share</h5>
+            <h3 class="fw-bold fs-6 mb-1">1-Click WhatsApp Share</h3>
             <p class="text-muted small mb-0">Share directly to group chats with pre-formatted challenge copy and instant QR codes.</p>
           </div>
         </div>
@@ -403,7 +403,7 @@
             <i class="fa-solid fa-chart-line"></i>
           </div>
           <div>
-            <h5 class="fw-bold mb-1">Creator Dashboard</h5>
+            <h3 class="fw-bold fs-6 mb-1">Creator Dashboard</h3>
             <p class="text-muted small mb-0">See who took your quiz, inspect what exact answers each friend picked, and manage questions anytime.</p>
           </div>
         </div>

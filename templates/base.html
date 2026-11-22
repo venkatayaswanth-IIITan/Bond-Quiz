@@ -3,7 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+
+  <!-- Google tag (gtag.js) - Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KEQMCR2VJ7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-KEQMCR2VJ7');
+  </script>
+
   <!-- Google Site Verification -->
   <meta name="google-site-verification" content="FkGajWtj6EQhtar92w0fYD53RZLtyt6i_yiyrivGE3M">
 
@@ -66,7 +76,7 @@
         <span>Bond<span class="text-gradient">Quiz</span></span>
       </a>
 
-      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navContent" aria-controls="navContent" aria-expanded="false" aria-label="Toggle navigation">
         <i class="fa-solid fa-bars-staggered fs-4"></i>
       </button>
 
@@ -94,7 +104,7 @@
             </button>
           </li>
           <li class="nav-item ms-lg-2">
-            <button id="soundToggleBtn" class="btn btn-bond-outline rounded-circle p-2" style="width: 42px; height: 42px;" title="Toggle Sound">
+            <button id="soundToggleBtn" class="btn btn-bond-outline rounded-circle p-2" style="width: 42px; height: 42px;" title="Toggle Sound" aria-label="Toggle sound effects">
               <i class="fa-solid fa-volume-high"></i>
             </button>
           </li>
@@ -114,7 +124,7 @@
       <h5 class="offcanvas-title fw-bold" id="myQuizzesLabel">
         <i class="fa-solid fa-trophy text-warning me-2"></i> My Quizzes & Leaderboards
       </h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close My Quizzes drawer"></button>
     </div>
     <div class="offcanvas-body p-3" id="myQuizzesOffcanvasBody"></div>
   </div>
@@ -163,7 +173,7 @@
         </div>
         <div class="col-md-3 text-md-end text-muted small">
           <div>Made with 💖 for genuine friendships</div>
-          <div class="mt-1 opacity-75">100% Free • No Login Needed</div>
+          <div class="mt-1 text-secondary fw-semibold">100% Free • No Login Needed</div>
         </div>
       </div>
     </div>

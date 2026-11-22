@@ -27,7 +27,7 @@
   --bg-page: #FAF8FF;
   --bg-card: #FFFFFF;
   --text-main: #1E1B4B;
-  --text-muted: #6B7280;
+  --text-muted: #4B5563;
   --text-light: #9CA3AF;
   
   --border-color: #F1EDF9;
@@ -178,7 +178,7 @@ main {
 /* Badges */
 .badge-soft-primary {
   background: var(--primary-light);
-  color: var(--primary);
+  color: #5B21B6;
   font-weight: 700;
   padding: 0.45rem 1rem;
   border-radius: var(--radius-pill);
@@ -190,7 +190,7 @@ main {
 
 .badge-soft-secondary {
   background: var(--secondary-light);
-  color: var(--secondary);
+  color: #9D174D;
   font-weight: 700;
   padding: 0.45rem 1rem;
   border-radius: var(--radius-pill);
