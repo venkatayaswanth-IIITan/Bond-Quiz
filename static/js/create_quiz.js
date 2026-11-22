@@ -420,11 +420,16 @@ async function submitQuizGeneration() {
       console.warn('localStorage error:', storageErr);
     }
 
-    submitBtn.className = 'btn btn-success btn-lg';
-    submitBtn.innerHTML = `<i class="fa-solid fa-check-circle me-2"></i> Created! Redirecting...`;
+    // Play celebrations
+    try {
+      if (window.soundFX) window.soundFX.playFanfare();
+    } catch (e) {}
+    try {
+      if (typeof launchCelebrationConfetti === 'function') launchCelebrationConfetti();
+    } catch (e) {}
 
-    // Immediately navigate to the Creator Dashboard!
-    window.location.replace(`${result.dashboard_url}&created=1`);
+    // Show Step 4 (Success / Share Screen) immediately so creator gets links!
+    renderSuccessScreen(result, title);
 
   } catch (err) {
     showToast(err.message, 'error', '❌');
@@ -434,30 +439,41 @@ async function submitQuizGeneration() {
   }
 }
 
-function renderSuccessScreen(result) {
+function renderSuccessScreen(result, quizTitle) {
   document.querySelectorAll('.wizard-step').forEach(s => s.classList.add('d-none'));
   const successStep = document.getElementById('stepSuccess');
   successStep.classList.remove('d-none');
 
-  document.getElementById('publicQuizUrl').value = result.quiz_url;
-  document.getElementById('creatorDashboardUrl').value = result.dashboard_url;
-  document.getElementById('openQuizBtn').href = result.quiz_url;
-  document.getElementById('openDashboardBtn').href = result.dashboard_url;
+  const fullQuizUrl = window.location.origin + result.quiz_url;
+  const fullDashboardUrl = window.location.origin + result.dashboard_url;
+
+  const pubInput = document.getElementById('publicQuizUrl');
+  if (pubInput) pubInput.value = fullQuizUrl;
+
+  const dashInput = document.getElementById('creatorDashboardUrl');
+  if (dashInput) dashInput.value = fullDashboardUrl;
+
+  const openQuiz = document.getElementById('openQuizBtn');
+  if (openQuiz) openQuiz.href = fullQuizUrl;
+
+  const openDash = document.getElementById('openDashboardBtn');
+  if (openDash) openDash.href = fullDashboardUrl;
 
   // WhatsApp button
   const waBtn = document.getElementById('shareWhatsAppBtn');
   if (waBtn) {
-    waBtn.onclick = () => shareOnWhatsApp(result.quiz_url);
+    const waText = `I created a quiz to test how well you know me! Think you can beat everyone? Play here: ${fullQuizUrl}`;
+    waBtn.onclick = () => shareOnWhatsApp(fullQuizUrl, waText);
   }
 
   // Native share button
   const shareBtn = document.getElementById('shareNativeBtn');
   if (shareBtn) {
-    shareBtn.onclick = () => shareQuizNative(result.quiz.title, 'Can you beat my friendship test?', result.quiz_url);
+    shareBtn.onclick = () => shareQuizNative(quizTitle || 'My BondQuiz', 'Can you beat my friendship test?', fullQuizUrl);
   }
 
   // QR Code generator (renders SVG barcode/QR)
-  renderQRCode('quizQrCodeContainer', result.quiz_url);
+  renderQRCode('quizQrCodeContainer', fullQuizUrl);
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }

@@ -452,6 +452,20 @@ function setupShareTools(quiz) {
   const publicUrl = `${host}/quiz/${quiz.public_id}`;
   const creatorUrl = `${host}/creator/${quiz.public_id}?token=${creatorToken}`;
 
+  // Top prominent share banner
+  const topPubInput = document.getElementById('topDashPublicUrl');
+  if (topPubInput) topPubInput.value = publicUrl;
+
+  const topWaBtn = document.getElementById('topDashShareWhatsApp');
+  if (topWaBtn) {
+    topWaBtn.onclick = () => shareOnWhatsApp(publicUrl, `I created a quiz to test how well you know me! Think you can beat everyone? Play here: ${publicUrl}`);
+  }
+
+  const topPlayBtn = document.getElementById('topDashPlayBtn');
+  if (topPlayBtn) {
+    topPlayBtn.href = publicUrl;
+  }
+
   const pubInput = document.getElementById('dashPublicUrl');
   const dashInput = document.getElementById('dashPrivateUrl');
   if (pubInput) pubInput.value = publicUrl;

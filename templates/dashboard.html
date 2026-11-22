@@ -137,6 +137,35 @@
       </div>
     </div>
 
+    <!-- Prominent Top Share Banner -->
+    <div class="card p-4 rounded-4 border-0 mb-4 shadow-sm" style="background: linear-gradient(135deg, #fdf2f8 0%, #f3e8ff 100%); border-left: 6px solid var(--primary) !important;">
+      <div class="row align-items-center g-3">
+        <div class="col-lg-7">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="badge bg-primary px-3 py-2 rounded-pill"><i class="fa-solid fa-share-nodes me-1"></i> Public Quiz Link</span>
+            <strong class="text-dark fs-5">Share this with your friends!</strong>
+          </div>
+          <p class="text-muted small mb-2">Friends can play instantly on mobile or desktop — no login or account required.</p>
+          <div class="input-group">
+            <input type="text" id="topDashPublicUrl" class="form-control form-control-lg fw-bold bg-white" readonly>
+            <button class="btn btn-bond-primary px-4" onclick="copyToClipboard(document.getElementById('topDashPublicUrl').value, this)">
+              <i class="fa-regular fa-copy me-1"></i> Copy Link
+            </button>
+          </div>
+        </div>
+        <div class="col-lg-5 text-lg-end">
+          <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+            <button id="topDashShareWhatsApp" class="btn btn-success btn-lg rounded-pill px-4 fw-bold shadow-sm">
+              <i class="fa-brands fa-whatsapp me-2 fs-5"></i> Share on WhatsApp
+            </button>
+            <a id="topDashPlayBtn" href="#" target="_blank" class="btn btn-bond-outline btn-lg rounded-pill px-3 fw-bold">
+              <i class="fa-solid fa-play me-1"></i> Try Quiz
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Navigation Tabs -->
     <ul class="nav nav-pills mb-4 gap-2" id="dashboardTabs" role="tablist">
       <li class="nav-item">
@@ -398,6 +427,37 @@
         <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Cancel</button>
         <button type="button" class="btn btn-bond-primary" onclick="submitAddQuestion()">Add Question</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Celebration Share Modal on Newly Created Quiz -->
+<div class="modal fade" id="newQuizSuccessModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 text-center p-4">
+      <div class="display-3 mb-2">🎉</div>
+      <h3 class="fw-bold mb-2">Your Quiz is Live!</h3>
+      <p class="text-muted mb-3">Copy your link or send it directly on WhatsApp to see who knows you best!</p>
+      
+      <div class="input-group mb-3">
+        <input type="text" id="newQuizModalUrl" class="form-control fw-bold bg-white" readonly>
+        <button class="btn btn-bond-primary" onclick="copyToClipboard(document.getElementById('newQuizModalUrl').value, this)">
+          <i class="fa-regular fa-copy me-1"></i> Copy
+        </button>
+      </div>
+
+      <div class="d-grid gap-2 mb-3">
+        <button id="newQuizModalWaBtn" class="btn btn-success btn-lg fw-bold">
+          <i class="fa-brands fa-whatsapp me-2"></i> Share on WhatsApp
+        </button>
+      </div>
+
+      <div id="newQuizModalQrCode" class="my-2"></div>
+      <div class="text-muted small mb-3">Scan with camera to open instantly</div>
+
+      <button type="button" class="btn btn-bond-secondary rounded-pill w-100" data-bs-dismiss="modal">
+        Go to Dashboard
+      </button>
     </div>
   </div>
 </div>
