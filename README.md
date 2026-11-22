@@ -10,134 +10,122 @@ Users can create personalized quizzes for best friends, friend groups, couples, 
 
 1. **Zero Registration / No Login Needed**:
    - Creators and participants jump straight in without an email, password, or account.
-   - Creators receive a secure tokenized private dashboard link stored safely.
+   - Creators receive a secure tokenized private dashboard link stored in local session.
 2. **Cheat-Proof Server-Side Scoring**:
    - Correct answers are stored strictly on the server and are **never** leaked via public quiz APIs or inspect element.
-   - Attempt tokens prevent duplicate or tampered submissions.
-3. **6 Modern Gen-Z Themes**:
-   - **Purple Bliss** (Default vibrant magenta & violet)
-   - **Sunset Glow** (Fiery coral & orange)
-   - **Cyber Neon** (Electric cyan & ultraviolet)
-   - **Bubblegum Pop** (Pastel pink & candy cyan)
-   - **Midnight Velvet** (Sleek dark neon mode)
-   - **Emerald Mint** (Fresh green & mint turquoise)
-4. **Interactive Multi-Step Quiz Builder**:
-   - Ready-made question bank for **Best Friend, Friends, Couple, Crush, Family, and Custom** quizzes.
-   - Reorder, edit, delete, or add custom questions with up to 4 options.
-   - Radio selector to mark creator's real answer.
-   - Live interactive preview modal.
-5. **Private Creator Dashboard**:
-   - Live analytics: Total participants, Average score, Highest score, and Completion count.
-   - Full Leaderboard with 🥇 Gold, 🥈 Silver, and 🥉 Bronze trophies.
-   - **Individual Friend Breakdown**: Inspect what exact answers each friend selected for every question (green/red highlights).
-   - Quiz controls: Toggle quiz active/closed, edit details, add/delete questions, or permanently delete the quiz.
-6. **Social Sharing Toolbox**:
-   - 1-click WhatsApp sharing with pre-formatted challenge text.
-   - Native Web Share API integration for iOS & Android.
-   - Instant QR code generator for easy phone camera scanning.
-7. **Playful Audio & Micro-interactions**:
-   - Zero-dependency Web Audio API sound synthesizer (pleasant taps, swooshes, fanfares).
-   - Canvas confetti celebrations on submission and high scores.
-   - Keyboard shortcuts (`1`, `2`, `3`, `4` to pick options, `Enter` to advance).
+   - Server-side attempt tokens prevent duplicate or unauthorized score tampering.
+3. **Curated Bestie Questions**:
+   - 10 curated questions ready to use out-of-the-box (Full Name, Nickname, Birthday, Favourite Colour, Favourite Food, Favourite Fruit, Favourite Drink, Favourite Movie, Morning or Night, Social Media App).
+4. **Live Leaderboard with Podium**:
+   - Gold 🥇, Silver 🥈, Bronze 🥉 trophies for top 3 scorers with tie-breaking by earliest completion time.
+5. **Private Creator Hub & Dashboard**:
+   - View all participant scores, completion dates, and individual answer breakdowns.
+   - Toggle quiz status (Active / Closed) or delete quizzes with cascade cleanups.
+6. **Vibrant Gen-Z Aesthetic**:
+   - 6 colorful themes (`purple_bliss`, `sunset_glow`, `cyber_neon`, `bubblegum`, `midnight_velvet`, `emerald_mint`).
+   - Confetti celebrations, Web Audio synthesizer sound effects, and 1-click WhatsApp / Web Share API integration.
 
 ---
 
-## 🚀 Technology Stack
+## 🚀 Deploy to Render (Step-by-Step)
 
-- **Backend**: Python 3, Flask, Flask-SQLAlchemy, Flask-CORS, Werkzeug security
-- **Database**: SQLite (SQLAlchemy ORM)
-- **Frontend**: HTML5, CSS3, JavaScript (ES6+), Bootstrap 5.3, Font Awesome 6
-- **Celebration / Audio**: Canvas Confetti, Web Audio API Sound Synthesizer
+BondQuiz is pre-configured for **Render** (via `render.yaml` and `Procfile` using `gunicorn`).
 
----
+### Method A: One-Click / Blueprint Deploy
+1. Push this repository to your GitHub account (`https://github.com/venkatayaswanth-IIITan/Bond-Quiz`).
+2. Log in to [Render.com](https://render.com).
+3. Click **New +** → **Blueprint**.
+4. Connect your **`Bond-Quiz`** GitHub repository.
+5. Render will automatically detect `render.yaml` and set up the Web Service.
+6. Click **Apply** to deploy!
 
-## 📂 Project Structure
-
-```text
-d:\Fun Quiz\
-├── app.py                      # Flask application factory and server entry point
-├── config.py                   # Configuration and secret parameters
-├── models.py                   # SQLAlchemy models (Quiz, Question, Option, Attempt, Answer)
-├── requirements.txt            # Python dependencies
-├── .env.example                # Example environment variables
-├── README.md                   # Project documentation
-├── routes/
-│   ├── __init__.py
-│   ├── quiz_routes.py          # Public views & quiz attempt/scoring APIs
-│   ├── creator_routes.py       # Creator authentication & quiz modification APIs
-│   └── dashboard_routes.py     # Private dashboard analytics APIs
-├── services/
-│   ├── __init__.py
-│   ├── quiz_service.py         # Question banks, ID generator, leaderboard queries
-│   └── scoring_service.py      # Server-side grading & tier feedback calculation
-├── templates/
-│   ├── base.html               # Master layout, navigation, toasts, audio setup
-│   ├── index.html              # Modern Gen-Z landing page
-│   ├── create_quiz.html        # Multi-step quiz creation wizard
-│   ├── quiz.html               # 1-by-1 question stepper & result breakdown
-│   ├── leaderboard.html        # Public Hall of Fame podium & rankings
-│   └── dashboard.html          # Secure private creator dashboard
-└── static/
-    ├── css/
-    │   ├── style.css           # Modern styles, gradients, glassmorphism, animations
-    │   └── themes.css          # 6 custom color themes
-    └── js/
-        ├── audio.js            # Web Audio API synthesizer
-        ├── main.js             # Toasts, clipboard copy, social share helpers
-        ├── create_quiz.js      # Quiz builder logic & template bank
-        ├── quiz.js             # Quiz stepper, answer selection, submission
-        └── dashboard.js        # Analytics, leaderboard, individual response viewer
-```
+### Method B: Manual Web Service Setup
+1. On [Render Dashboard](https://dashboard.render.com), click **New +** → **Web Service**.
+2. Connect your GitHub repository: `venkatayaswanth-IIITan/Bond-Quiz`.
+3. Fill in the service configuration:
+   - **Name**: `bondquiz`
+   - **Runtime**: `Python 3`
+   - **Branch**: `main`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `gunicorn app:app`
+   - **Plan**: `Free`
+4. Under **Environment Variables**, add:
+   - `PYTHON_VERSION`: `3.11.0`
+   - `FLASK_DEBUG`: `false`
+   - `SECRET_KEY`: *(Click Generate or enter a random 32-character string)*
+   - `TOKEN_SALT`: *(Click Generate or enter a random string)*
+5. Click **Create Web Service**.
+6. Render will build and deploy your app. Once finished, you will receive a free live HTTPS URL (e.g. `https://bondquiz.onrender.com`).
 
 ---
 
-## ⚙️ Installation & Setup Instructions
+## 💻 Local Development Setup
 
 ### 1. Prerequisites
-Ensure **Python 3.10+** is installed on your system.
+- Python 3.10+
+- Git
 
-### 2. Install Dependencies
-In your terminal, navigate to the project directory:
+### 2. Clone and Install
 ```bash
+git clone https://github.com/venkatayaswanth-IIITan/Bond-Quiz.git
+cd Bond-Quiz
+
+# Create virtual environment
+python -m venv venv
+
+# Activate virtual environment
+# Windows:
+venv\Scripts\activate
+# Mac/Linux:
+source venv/bin/activate
+
+# Install dependencies
 pip install -r requirements.txt
 ```
 
-### 3. Run the Application
-Start the Flask development server:
+### 3. Run the Development Server
 ```bash
 python app.py
 ```
+Open [http://127.0.0.1:5000](http://127.0.0.1:5000) in your browser.
 
-The application will be live at:
-```text
-http://127.0.0.1:5000
-```
-
----
-
-## 🧪 Testing the Workflow
-
-You can test the entire end-to-end workflow:
-1. Open `http://127.0.0.1:5000` in your browser.
-2. Click **Create a Quiz**, select **Best Friend**, enter your nickname, and pick a theme.
-3. Review or customize the questions, pick your real answers, and click **Generate & Share Quiz**.
-4. Copy the public quiz link and open it in an Incognito / Private browsing window.
-5. Enter a friend's nickname and complete the questions.
-6. Submit and observe the server-side score calculation, confetti, and detailed breakdown.
-7. Return to your Creator Dashboard and verify that the new friend appears on the live leaderboard and that their individual answers can be inspected.
-
-Automated tests can also be executed:
+### 4. Run Automated Tests
 ```bash
+# Unit tests
 python test_app.py
+
+# End-to-end integration tests
+python verify_workflow.py
 ```
 
 ---
 
-## 🔒 Security & Anti-Cheat Highlights
+## 📁 Project Structure
 
-- **Server-Side Validation**: The frontend never receives the `is_correct` boolean for quiz options before submission. Grading occurs entirely on the server using database ground truth.
-- **Hashed Creator Tokens**: Creator tokens are cryptographically hashed (`werkzeug.security`) before storage. Public endpoints and leaderboards never expose tokens.
-- **Session Protection**: Attempt sessions use server-issued one-time tokens (`att_...`) to prevent race conditions and duplicate submissions.
-- **Parameterized SQL**: SQLAlchemy ORM guarantees parameterized queries to safeguard against SQL injection.
-- **XSS Protection**: Jinja2 auto-escaping and JavaScript text sanitizers prevent script injection.
-#
+```
+Bond-Quiz/
+├── app.py                  # Application factory and entrypoint
+├── config.py               # Database and app configurations
+├── models.py               # SQLAlchemy models (Quiz, Question, Option, Attempt, Answer)
+├── requirements.txt        # Production dependencies (Flask, SQLAlchemy, Gunicorn)
+├── Procfile                # WSGI command for Render / Heroku
+├── render.yaml             # Render Blueprint configuration
+├── routes/
+│   ├── quiz_routes.py      # Public quiz play, creation, and submission APIs
+│   ├── creator_routes.py   # Creator authentication and editing APIs
+│   └── dashboard_routes.py # Creator dashboard and analytics APIs
+├── services/
+│   ├── quiz_service.py     # Question banks, ID generation, database helpers
+│   └── scoring_service.py  # Anti-cheat evaluation and tier feedback
+├── static/
+│   ├── css/                # Gen-Z gradients, animations, and 6 themes
+│   └── js/                 # Steppers, confetti, Web Audio, creator storage
+└── templates/              # Bootstrap 5 responsive templates
+```
+
+---
+
+## 🔒 Security Highlights
+- **Hashed Creator Tokens**: Access keys for dashboards are hashed using `werkzeug.security` with PBKDF2:SHA256.
+- **Anti-Tampering Tokens**: Single-use attempt tokens generated on quiz start validate every submission.
+- **Cheat-Proof API**: Answers are strictly withheld until server-side grading completes.

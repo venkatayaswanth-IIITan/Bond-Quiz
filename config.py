@@ -5,10 +5,13 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY', secrets.token_hex(32))
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        'DATABASE_URL', 
-        f"sqlite:///{os.path.join(BASE_DIR, 'bondquiz.sqlite')}"
-    )
+    
+    # Handle Render / Heroku Postgres URI format if provided
+    raw_db_url = os.environ.get('DATABASE_URL')
+    if raw_db_url and raw_db_url.startswith("postgres://"):
+        raw_db_url = raw_db_url.replace("postgres://", "postgresql://", 1)
+        
+    SQLALCHEMY_DATABASE_URI = raw_db_url or f"sqlite:///{os.path.join(BASE_DIR, 'bondquiz.sqlite')}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = False
     
